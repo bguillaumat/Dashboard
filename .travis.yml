@@ -16,3 +16,10 @@ deploy:
   app: obscure-headland-59625
   on:
     repo: AsianPw/DEV_dashboard_2018
+
+after_success:
+  - eval "$(ssh-agent -s)"
+  - chmod 600 .travis/id_rsa
+  - ssh-add .travis/id_rsa
+  - git remote add deploy git@git.epitech.eu:brice.lang-nguyen@epitech.eu/DEV_dashboard_2018
+  - git push deploy --all
