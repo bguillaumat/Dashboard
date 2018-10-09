@@ -24,9 +24,9 @@ jobs:
         provider: heroku
         app: staging-dashboard-2018
         api_key: $KEY
-	on:
-	  node: "10.11.0"
-	  branch: develop
+        on:
+          node: "10.11.0"
+          branch: develop
     - stage: test staging
       script: 'curl https://staging-dashboard-2018.herokuapp.com'
     - stage: deploy to production
@@ -34,8 +34,8 @@ jobs:
       deploy:
         <<: *heroku
         app: obscure-headland-59625
-	on:
-	  branch: master
+        on:
+          branch: master
     - stage: test production
       script: 'curl https://obscure-headland-59625.herokuapp.com'
 
