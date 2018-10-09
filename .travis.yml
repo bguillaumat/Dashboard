@@ -20,6 +20,7 @@ deploy:
     secure: $KEY
   app: obscure-headland-59625
   on:
+    condition: $TRAVIS_TEST_RESULT == 0
     node: "10.11.0"
     branch: master
     repo: AsianPw/DEV_dashboard_2018
