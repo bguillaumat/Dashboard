@@ -14,24 +14,30 @@ cache:
 before_install:
   - npm prune
 
-deploy:
-  - provider: heroku
-    api_key:
-      secure: $KEY
-    app: staging-dashboard-2018
-    on:
-      node: "10.11.0"
-      branch: develop
-      repo: AsianPw/DEV_dashboard_2018
-  - provider: heroku
-    api_key:
-      secure: $KEY
-    app: obscure-headland-59625
-    on:
-      condition: $TRAVIS_TEST_RESULT == 0
-      node: "10.11.0"
-      branch: master
-      repo: AsianPw/DEV_dashboard_2018
+jobs:
+  include:
+    - stage: unit tests
+      script: npm test
+    - stage: deploy to staging
+      script: skip
+      deploy: &heroku
+        provider: heroku
+        app: staging-dashboard-2018
+        api_key: $KEY
+	on:
+	  node: "10.11.0"
+	  branch: develop
+    - stage: test staging
+      script: 'curl https://staging-dashboard-2018.herokuapp.com'
+    - stage: deploy to production
+      script: skip
+      deploy:
+        <<: *heroku
+        app: obscure-headland-59625
+	on:
+	  branch: master
+    - stage: test production
+      script: 'curl https://obscure-headland-59625.herokuapp.com'
 
 after_success:
   - eval "$(ssh-agent -s)"
@@ -39,3 +45,4 @@ after_success:
   - ssh-add .travis/id_rsa
   - git remote add deploy git@git.epitech.eu:brice.lang-nguyen@epitech.eu/DEV_dashboard_2018
   - git push deploy --all
+
