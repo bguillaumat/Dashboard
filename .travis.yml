@@ -1,11 +1,18 @@
 language: node_js
 node_js:
-	- "node"
+  - "node"
+
+cache:
+  directories:
+    - node_modules
+
+before_install:
+  - npm prune
 
 deploy:
-	provider: heroku
-	api_key:
-		secure: "d2d4b7cb-cc79-4cd2-ae03-4635185a7f2e"
-	app: obscure-headland-59625
-	on:
-		repo: AsianPw/DEV_dashboard_2018
+  provider: heroku
+  api_key:
+    secure: "d2d4b7cb-cc79-4cd2-ae03-4635185a7f2e"
+  app: obscure-headland-59625
+  on:
+    repo: AsianPw/DEV_dashboard_2018
