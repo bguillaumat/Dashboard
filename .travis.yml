@@ -17,7 +17,7 @@ before_install:
 deploy:
   provider: heroku
   api_key:
-    secure: KEY
+    secure: $KEY
   app: obscure-headland-59625
   on:
     repo: AsianPw/DEV_dashboard_2018
