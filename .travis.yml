@@ -2,8 +2,5 @@ sudo: required
 language: cpp
 services:
   - docker
-before_install:
-  - docker build -t friendlyhello .
-  - docker run -itd --name build friendlyhello
 script:
-  - docker exec build //to_exec
+  -  docker-compose build && docker-compose up
