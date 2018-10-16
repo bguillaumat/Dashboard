@@ -16,16 +16,16 @@ var config = {
 };
 firebase.initializeApp(config);
 
-var openweathermeteo = function(city, callback){
-    var  url = 'http://api.openweathermap.org/data/2.5/forecast/daily?q='+city+'&cnt=1&mode=json&units=metric&lang=fr&appid=521c8f8246c012c8421856de66e06c2a';
+let openweathermeteo = function(city, callback){
+    var  url = 'http://api.openweathermap.org/data/2.5/weather?q='+city+'&units=metric&lang=fr&appid=521c8f8246c012c8421856de66e06c2a';
 
     request(url, function(err, response, body){
         try{
             var result = JSON.parse(body);
             var previsions = {
-                temperature : result.list[0].temp.day,
-                city : result.city.name,
-                state : result.list[0].weather[0].main
+                temperature : result.main.temp,
+                city : result.name,
+                state : result.weather[0].description
             };
 
             callback(null, previsions);
@@ -34,15 +34,27 @@ var openweathermeteo = function(city, callback){
         }
     });
 };
-
-var result = 12;
+let result = 12;
 let err = {code: false, msg: ""};
-var widget = {meteo: true, etage: result};
+let widget = {meteo: {state: false, data: {}}, etage: result};
+
+function askMeteo(city) {
+    openweathermeteo(city, function(err, previsions){
+        if(err) return console.log(err);
+        console.log('A ' + previsions.city + ', la température est de ' + previsions.temperature + '°C avec ' + previsions.state);
+        return previsions;
+    });
+}
+
+function wichWidget() {
+    if (widget.meteo.state === true) {
+        widget.meteo.data = openweathermeteo(city);
+    }
+}
 
 app.use(session({secret: 'dashboard'}))
 
     .get('/', function(req, res) {
-        console.log(firebase.auth.Auth.currentUser);
         res.render("log.ejs", {err});
     })
 
@@ -53,7 +65,6 @@ app.use(session({secret: 'dashboard'}))
     .post('/signin/', urlencodedParser, function(req, res) {
         if (req.body.email !== '' && req.body.passwd) {
             firebase.auth().signInWithEmailAndPassword(req.body.email, req.body.passwd).then((e) => {
-                console.log(e);
                 res.redirect("/main");
             }).catch(function(error) {
                 var errorCode = error.code;
@@ -64,7 +75,8 @@ app.use(session({secret: 'dashboard'}))
             });
         }
         else {
-            err = false;
+            err.code = true;
+            err.msg = "Need an email and a password!";
             res.redirect("/");
         }
     })
@@ -73,7 +85,6 @@ app.use(session({secret: 'dashboard'}))
             if (req.body.email !== '' && req.body.passwd) {
                 console.log(req.body.email, " ", req.body.passwd);
                 firebase.auth().createUserWithEmailAndPassword(req.body.email, req.body.passwd).then((e) => {
-                    console.log(e);
                     res.redirect("/main");
                 }).catch(function(error) {
                     var errorCode = error.code;
@@ -84,15 +95,14 @@ app.use(session({secret: 'dashboard'}))
                 });
             }
             else {
-                err.code = false;
+                err.code = true;
+                err.msg = "Need an email and a password!";
                 res.redirect("/");
             }
     })
 
     .use(function(req, res, next){
-        res.redirect("/main");
-        //res.setHeader('Content-Type', 'text/plain');
-        //res.status(404).send('Erreur 404: Page introuvable!');
+        res.redirect("/");
     });
 
 app.listen(8080);

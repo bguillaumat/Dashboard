@@ -2,11 +2,14 @@
 <html>
     <head>
         <div id="fb-root"></div>
-        <title>Etages</title>
+        <title>Dashboard</title>
     </head>
     <body>
         <%if (widget.etage > 10) { %>
             <p>Vous etes tres haut!</p>
+        <% } %>
+        <%if (widget.meteo.state == true) { %>
+            <p>Create Widget</p> <!-- widget.meteo.data.city or .temperature .state -->
         <% } %>
     </body>
 </html>
