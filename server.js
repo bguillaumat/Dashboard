@@ -59,6 +59,7 @@ app.use(session({secret: 'dashboard'}))
                 var errorCode = error.code;
                 var errorMessage = error.message;
                 err.code = true;
+                err.msg = errorMessage;
                 res.redirect("/");
             });
         }
