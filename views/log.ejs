@@ -18,8 +18,10 @@
                             <h3 class="mb-0">Login</h3>
                         </div>
                         <div class="card-body">
-                            <% if (err == true) { %>
-                                <p>Compte inexistant</p>
+                            <%if (err.code == true) { %>
+                                <div class="alert alert-danger">
+                                    <p><% err.msg %></p>
+                                </div>
                             <% } %>
                             <form action="/signin/" method="post">
                                 <div class="form-group">
