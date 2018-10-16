@@ -19,10 +19,22 @@ var openweathermeteo = function(city, callback){
             callback(e);
         }
     });
-}
+};
+
+result = 12;
+widget = {meteo: true, etage: result};
 
 app.get('/', function(req, res) {
     res.render("log.ejs");
+});
+
+app.get('/test', function (req, res) {
+    res.render("main_view.ejs", {widget});
+});
+
+app.use(function(req, res, next){
+    res.setHeader('Content-Type', 'text/plain');
+    res.status(404).send('Erreur 404: Page introuvable!');
 });
 
 app.listen(8080);
