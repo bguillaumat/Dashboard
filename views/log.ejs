@@ -3,14 +3,19 @@
     <head>
         <title>Login</title>
     </head>
-    <body>
-        <p style="text-align: center">
-            <label for="email">Email</label><br>
-            <input type="text" name="email" id="email" autofocus /> <br>
-            <label for="passwd">Password</label><br>
-            <input type="password" name="passwd" id="passwd" autofocus /> <br>
-            <input type="submit" value="Sign-in"/> <br>
-            <input type="submit" value="Sign-up"/>
-        </p>
+    <body style="text-align: center">
+        <%if (err == true) { %>
+            <p>Compte inexistant</p>
+        <% } %>
+        <form action="/signin/" method="post">
+            <p>
+                <label for="email">Email</label><br>
+                <input type="text" name="email" id="email" autofocus /> <br>
+                <label for="passwd">Password</label><br>
+                <input type="password" name="passwd" id="passwd" autofocus /> <br>
+                <input type="submit" value="Sign-in"/> <br>
+                <input type="submit" value="Sign-up"/>
+            </p>
+        </form>
     </body>
 </html>
