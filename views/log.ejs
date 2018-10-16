@@ -5,25 +5,20 @@
           integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <title>Login</title>
 </head>
-<body class="bg-dark">
+<body>
 <div class="container py-5">
     <div class="row">
         <div class="col-md-12">
             <div class="row">
                 <div class="col-md-6 mx-auto">
-
-                    <!-- form card login -->
-                    <div class="card rounded-0">
-                        <div class="card-header">
-                            <h3 class="mb-0">Login</h3>
-                        </div>
+                    <div class="card rounded-0 shadow-lg p-3 mb-5 bg-white rounded">
                         <div class="card-body">
-                            <%if (err.code == true) { %>
+                            <% if (err.code == true) { %>
                                 <div class="alert alert-danger">
-                                    <p><% err.msg %></p>
+                                    <%= err.msg %>
                                 </div>
                             <% } %>
-                            <form action="/signin/" method="post">
+                            <form method="post">
                                 <div class="form-group">
                                     <label for="email">Email</label>
                                     <input class="form-control" type="text" name="email" id="email" autofocus/>
@@ -33,8 +28,8 @@
                                     <input class="form-control" type="password" name="passwd" id="passwd" autofocus/>
                                 </div>
                                 <div class="text-right">
-                                    <input class="btn btn-link" type="submit" value="Sign-in"/>
-                                    <input class="btn btn-primary" type="submit" value="Sign-up"/>
+                                    <input class="btn btn-link" type="submit" value="Sign-in" formaction="/signin/"/>
+                                    <input class="btn btn-primary" type="submit" value="Sign-up" formaction="/signup/" />
                                 </div>
                             </form>
                         </div>
