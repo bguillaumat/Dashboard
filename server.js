@@ -1,6 +1,17 @@
 var express = require('express');
 var request = require('request');
 var app = express();
+var firebase = require("firebase");
+
+var config = {
+    apiKey: "AIzaSyBFkGiSYcEVGWoeKFfdOz6lvZ4sdYkOhC4",
+    authDomain: "dashboard-epitech-7167a.firebaseapp.com",
+    databaseURL: "https://dashboard-epitech-7167a.firebaseio.com",
+    projectId: "dashboard-epitech-7167a",
+    storageBucket: "dashboard-epitech-7167a.appspot.com",
+    messagingSenderId: "256937319284"
+};
+firebase.initializeApp(config);
 
 var openweathermeteo = function(city, callback){
     var  url = 'http://api.openweathermap.org/data/2.5/forecast/daily?q='+city+'&cnt=1&mode=json&units=metric&lang=fr&appid=521c8f8246c012c8421856de66e06c2a';
@@ -26,6 +37,11 @@ widget = {meteo: true, etage: result};
 
 app.get('/', function(req, res) {
     res.render("log.ejs");
+    firebase.auth().signInWithEmailAndPassword(email, password).catch(function(error) {
+        // Handle Errors here.
+        var errorCode = error.code;
+        var errorMessage = error.message;
+    });
 });
 
 app.get('/test', function (req, res) {

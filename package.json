@@ -4,10 +4,10 @@
   "description": "Node.js on Docker",
   "author": "Brice Lang-Nguyen <brice.lang-nguyen@epitech.eu>",
   "main": "server.js",
-  "license" : "SEE LICENSE IN <filename>",
+  "license": "SEE LICENSE IN <filename>",
   "repository": {
-    "type" : "git",
-    "url" : "https://github.com/AsianPw/DEV_dashboard_2018"
+    "type": "git",
+    "url": "https://github.com/AsianPw/DEV_dashboard_2018"
   },
   "scripts": {
     "start": "node server.js"
@@ -15,6 +15,7 @@
   "dependencies": {
     "ejs": "^2.6.1",
     "express": "^4.16.4",
+    "firebase": "^5.5.4",
     "request": "^2.88.0"
   }
 }
