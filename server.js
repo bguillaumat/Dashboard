@@ -15,20 +15,6 @@ var config = {
     messagingSenderId: "256937319284"
 };
 firebase.initializeApp(config);
-firebase.auth().setPersistence(firebase.auth.Auth.Persistence.NONE)
-    .then(function() {
-        // Existing and future Auth states are now persisted in the current
-        // session only. Closing the window would clear any existing state even
-        // if a user forgets to sign out.
-        // ...
-        // New sign-in will be persisted with session persistence.
-        return firebase.auth().signInWithEmailAndPassword(email, password);
-    })
-    .catch(function(error) {
-        // Handle Errors here.
-        var errorCode = error.code;
-        var errorMessage = error.message;
-    });
 
 var openweathermeteo = function(city, callback){
     var  url = 'http://api.openweathermap.org/data/2.5/forecast/daily?q='+city+'&cnt=1&mode=json&units=metric&lang=fr&appid=521c8f8246c012c8421856de66e06c2a';
@@ -49,49 +35,63 @@ var openweathermeteo = function(city, callback){
     });
 };
 
-function connectFC(email, password) {
-    firebase.auth().signInWithEmailAndPassword(email, password).catch(function(error) {
-        // Handle Errors here.
-        var errorCode = error.code;
-        var errorMessage = error.message;
-    });
-}
-
 var result = 12;
-let err = false;
+let err = {code: false, msg: ""};
 var widget = {meteo: true, etage: result};
 
-app.use(session({secret: 'dashboard'}));
+app.use(session({secret: 'dashboard'}))
 
+    .get('/', function(req, res) {
+        console.log(firebase.auth.Auth.currentUser);
+        res.render("log.ejs", {err});
+    })
 
-app.get('/', function(req, res) {
-    res.render("log.ejs", {err});
-});
+    .get('/main', function (req, res) {
+        res.render("main_view.ejs", {widget});
+    })
 
-app.get('/main', function (req, res) {
-    res.render("main_view.ejs", {widget});
-});
-
-app.post('/signin/', urlencodedParser, function(req, res) {
-    if (req.body.email !== '' && req.body.passwd) {
-        firebase.auth().signInWithEmailAndPassword(req.body.email, req.body.passwd).then((e) => {
-            console.log(e);
-            res.redirect("/main");
-        }).catch(function(error) {
-            var errorCode = error.code;
-            var errorMessage = error.message;
-            err = true;
+    .post('/signin/', urlencodedParser, function(req, res) {
+        if (req.body.email !== '' && req.body.passwd) {
+            firebase.auth().signInWithEmailAndPassword(req.body.email, req.body.passwd).then((e) => {
+                console.log(e);
+                res.redirect("/main");
+            }).catch(function(error) {
+                var errorCode = error.code;
+                var errorMessage = error.message;
+                err.code = true;
+                res.redirect("/");
+            });
+        }
+        else {
+            err = false;
             res.redirect("/");
-        });
-    }
-    else
-        return;
-});
+        }
+    })
 
-app.use(function(req, res, next){
-    res.redirect("/main");
-    //res.setHeader('Content-Type', 'text/plain');
-    //res.status(404).send('Erreur 404: Page introuvable!');
-});
+    .post('/signup/', urlencodedParser, function (req, res) {
+            if (req.body.email !== '' && req.body.passwd) {
+                console.log(req.body.email, " ", req.body.passwd);
+                firebase.auth().createUserWithEmailAndPassword(req.body.email, req.body.passwd).then((e) => {
+                    console.log(e);
+                    res.redirect("/main");
+                }).catch(function(error) {
+                    var errorCode = error.code;
+                    var errorMessage = error.message;
+                    err.code = true;
+                    err.msg = errorMessage;
+                    res.redirect("/");
+                });
+            }
+            else {
+                err.code = false;
+                res.redirect("/");
+            }
+    })
+
+    .use(function(req, res, next){
+        res.redirect("/main");
+        //res.setHeader('Content-Type', 'text/plain');
+        //res.status(404).send('Erreur 404: Page introuvable!');
+    });
 
 app.listen(8080);
