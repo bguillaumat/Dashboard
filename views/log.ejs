@@ -1,21 +1,48 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>Login</title>
-    </head>
-    <body style="text-align: center">
-        <%if (err.code == true) { %>
-            <p>Compte inexistant</p>
-        <% } %>
-        <form method="post">
-            <p>
-                <label for="email">Email</label><br>
-                <input type="text" name="email" id="email" autofocus /> <br>
-                <label for="passwd">Password</label><br>
-                <input type="password" name="passwd" id="passwd" autofocus /> <br>
-                <input type="submit" value="Sign-in" formaction="/signin/"/> <br>
-                <input type="submit" value="Sign-up" formaction="/signup/"/> <br>
-            </p>
-        </form>
-    </body>
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <title>Login</title>
+</head>
+<body class="bg-dark">
+<div class="container py-5">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col-md-6 mx-auto">
+
+                    <!-- form card login -->
+                    <div class="card rounded-0">
+                        <div class="card-header">
+                            <h3 class="mb-0">Login</h3>
+                        </div>
+                        <div class="card-body">
+                            <%if (err.code == true) { %>
+                                <div class="alert alert-danger">
+                                    <p><% err.msg %></p>
+                                </div>
+                            <% } %>
+                            <form action="/signin/" method="post">
+                                <div class="form-group">
+                                    <label for="email">Email</label>
+                                    <input class="form-control" type="text" name="email" id="email" autofocus/>
+                                </div>
+                                <div class="form-group">
+                                    <label for="passwd">Password</label>
+                                    <input class="form-control" type="password" name="passwd" id="passwd" autofocus/>
+                                </div>
+                                <div class="text-right">
+                                    <input class="btn btn-link" type="submit" value="Sign-in"/>
+                                    <input class="btn btn-primary" type="submit" value="Sign-up"/>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
 </html>
