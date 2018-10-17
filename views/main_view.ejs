@@ -1,15 +1,29 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Dashboard</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Dashboard</title>
     </head>
-    <body>
+    <body style="background-color: #00796b">
+        <nav class="navbar sticky-top navbar-light shadow" style="background-color: #004c40;">
+            <a class="navbar-brand" style="color: #ffffff" href="#">Logout</a>
+            <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link" href="#"><i class="fa fa-cog" style="color: #ffffff"></i></a>
+                </li>
+            </ul>
+        </nav>
         <%if (widget.etage > 10) { %>
             <p>Vous etes tres haut!</p>
         <% } %>
         <%if (widget.meteo.state == true) { %>
-            <p>Create Widget</p> <!-- widget.meteo.data.city or .temperature .state -->
+            <div class="card shadow-lg p-3 mb-5 bg-white rounded">
+                <div class="card-body">
+
+                </div>
+            </div>
         <% } %>
     </body>
 </html>
