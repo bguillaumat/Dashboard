@@ -54,7 +54,7 @@ function wichWidget() {
 
 app.use(session({secret: 'dashboard'}))
 
-    .get('/', function(req, res) {
+    .get('/login', function(req, res) {
         res.render("log.ejs", {err});
     })
 
@@ -71,13 +71,13 @@ app.use(session({secret: 'dashboard'}))
                 var errorMessage = error.message;
                 err.code = true;
                 err.msg = errorMessage;
-                res.redirect("/");
+                res.redirect("/login");
             });
         }
         else {
             err.code = true;
             err.msg = "Need an email and a password!";
-            res.redirect("/");
+            res.redirect("/login");
         }
     })
 
@@ -91,18 +91,18 @@ app.use(session({secret: 'dashboard'}))
                     var errorMessage = error.message;
                     err.code = true;
                     err.msg = errorMessage;
-                    res.redirect("/");
+                    res.redirect("/login");
                 });
             }
             else {
                 err.code = true;
                 err.msg = "Need an email and a password!";
-                res.redirect("/");
+                res.redirect("/login");
             }
     })
 
     .use(function(req, res, next){
-        res.redirect("/");
+        res.redirect("/login");
     });
 
 app.listen(8080);
