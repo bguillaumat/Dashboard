@@ -109,4 +109,4 @@ app.use(session({secret: 'dashboard'}))
         res.redirect("/");
     });
 
-app.listen(8080);
+app.listen(process.env.PORT || 8080);
