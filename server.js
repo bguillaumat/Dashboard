@@ -19,7 +19,7 @@ firebase.initializeApp(config);
 
 let result = 12;
 let err = {code: false, msg: ""};
-let widget = {meteo: {state: true, data: {city: '', temp: '', state: ''}}, etage: result};
+let widget = {meteo: {state: true, data: {city: 'Paris', temp: '', state: ''}}, etage: result};
 let user = {state: false};
 
 let openweathermeteo = function(city, callback){
@@ -28,9 +28,11 @@ let openweathermeteo = function(city, callback){
     request(url, function(err, response, body){
         try{
             let result = JSON.parse(body);
+            if (result.cod === "404")
+                return null;
             let previsions = {
                 temperature : result.main.temp,
-                city : result.name,
+                //city : result.name,
                 state : result.weather[0].description
             };
 
@@ -44,17 +46,22 @@ let openweathermeteo = function(city, callback){
 function askMeteo(city) {
     openweathermeteo(city, function(err, previsions){
         if(err) return console.log(err);
-        console.log('A ' + previsions.city + ', la température est de ' + previsions.temperature + '°C avec ' + previsions.state);
-        widget.meteo.data.city = previsions.city;
-        widget.meteo.data.temp = previsions.temperature;
-        widget.meteo.data.state = previsions.state;
+        if (previsions.temperature != null) {
+            //widget.meteo.data.city = previsions.city;
+            widget.meteo.data.temp = previsions.temperature;
+            widget.meteo.data.state = previsions.state;
+        }
     });
 }
 
 function wichWidget() {
     if (widget.meteo.state === true) {
-        askMeteo('Paris');
+        askMeteo(widget.meteo.city);
     }
+}
+
+function logout() {
+    document.signoutForm.submit();
 }
 
 app.use(session({secret: 'dashboard'}))

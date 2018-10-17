@@ -8,16 +8,15 @@
     </head>
     <body style="background-color: #00796b">
         <nav class="navbar sticky-top navbar-light shadow" style="background-color: #004c40;">
-            <a class="navbar-brand" style="color: #ffffff" href="#">Logout</a>
+            <form method="post" action="/signout/" name="signoutForm">
+                <a class="navbar-brand" style="color: #ffffff" href="#" onclick="document.signoutForm.submit()">Logout</a>
+            </form>
             <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
                 <li class="nav-item">
                     <a class="nav-link" href="#"><i class="fa fa-cog" style="color: #ffffff"></i></a>
                 </li>
             </ul>
         </nav>
-        <%if (widget.etage > 10) { %>
-            <p>Vous etes tres haut!</p>
-        <% } %>
         <%if (widget.meteo.state == true) { %>
             <div class="card shadow p-3 mb-5 rounded" style="background-color: #48a999;">
                 <div class="card-body">
