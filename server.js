@@ -7,9 +7,6 @@ var bodyParser = require('body-parser');
 var urlencodedParser = bodyParser.urlencoded({ extended: false });
 var firebase = require("firebase");
 
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
-
 var config = {
     apiKey: "AIzaSyBFkGiSYcEVGWoeKFfdOz6lvZ4sdYkOhC4",
     authDomain: "dashboard-epitech-7167a.firebaseapp.com",
@@ -58,7 +55,7 @@ function wichWidget() {
 
 app.use(session({secret: 'dashboard'}))
 
-    .get('/', function(req, res) {
+    .get('/login', function(req, res) {
         res.render("log.ejs", {err});
     })
 
@@ -75,13 +72,13 @@ app.use(session({secret: 'dashboard'}))
                 var errorMessage = error.message;
                 err.code = true;
                 err.msg = errorMessage;
-                res.redirect("/");
+                res.redirect("/login");
             });
         }
         else {
             err.code = true;
             err.msg = "Need an email and a password!";
-            res.redirect("/");
+            res.redirect("/login");
         }
     })
 
@@ -95,18 +92,18 @@ app.use(session({secret: 'dashboard'}))
                     var errorMessage = error.message;
                     err.code = true;
                     err.msg = errorMessage;
-                    res.redirect("/");
+                    res.redirect("/login");
                 });
             }
             else {
                 err.code = true;
                 err.msg = "Need an email and a password!";
-                res.redirect("/");
+                res.redirect("/login");
             }
     })
 
     .use(function(req, res, next){
-        res.redirect("/");
+        res.redirect("/login");
     });
 
 app.listen(process.env.PORT || 8080);
