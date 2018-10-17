@@ -4,6 +4,7 @@ let app = express();
 let session = require('cookie-session');
 let bodyParser = require('body-parser');
 let urlencodedParser = bodyParser.urlencoded({ extended: false });
+let store = require('store');
 let firebase = require("firebase");
 
 let config = {
@@ -18,7 +19,7 @@ firebase.initializeApp(config);
 
 let result = 12;
 let err = {code: false, msg: ""};
-let widget = {meteo: {state: false, data: {}}, etage: result};
+let widget = {meteo: {state: true, data: {}}, etage: result};
 let user = {state: false};
 
 let openweathermeteo = function(city, callback){
@@ -57,11 +58,14 @@ function wichWidget() {
 app.use(session({secret: 'dashboard'}))
 
     .get('/login', function(req, res) {
-        res.render("log.ejs", {err});
+        if (store.get('user') != null)
+            res.redirect("/main");
+        else
+            res.render("log.ejs", {err});
     })
 
     .get('/main', function (req, res) {
-        if (user.state)
+        if (store.get('user') != null)
             res.render("main_view.ejs", {widget});
         else
             res.redirect("/login");
@@ -70,6 +74,7 @@ app.use(session({secret: 'dashboard'}))
     .post('/signin/', urlencodedParser, function(req, res) {
         if (req.body.email !== '' && req.body.passwd) {
             firebase.auth().signInWithEmailAndPassword(req.body.email, req.body.passwd).then((e) => {
+                store.set('user', { data: e });
                 res.redirect("/main");
             }).catch(function(error) {
                 let errorCode = error.code;
@@ -90,6 +95,7 @@ app.use(session({secret: 'dashboard'}))
             if (req.body.email !== '' && req.body.passwd) {
                 console.log(req.body.email, " ", req.body.passwd);
                 firebase.auth().createUserWithEmailAndPassword(req.body.email, req.body.passwd).then((e) => {
+                    store.set('user', { data: e });
                     res.redirect("/main");
                 }).catch(function(error) {
                     let errorCode = error.code;
