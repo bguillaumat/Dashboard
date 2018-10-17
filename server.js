@@ -1,12 +1,12 @@
-var express = require('express');
-var request = require('request');
-var app = express();
-var session = require('cookie-session');
-var bodyParser = require('body-parser');
-var urlencodedParser = bodyParser.urlencoded({ extended: false });
-var firebase = require("firebase");
+let express = require('express');
+let request = require('request');
+let app = express();
+let session = require('cookie-session');
+let bodyParser = require('body-parser');
+let urlencodedParser = bodyParser.urlencoded({ extended: false });
+let firebase = require("firebase");
 
-var config = {
+let config = {
     apiKey: "AIzaSyBFkGiSYcEVGWoeKFfdOz6lvZ4sdYkOhC4",
     authDomain: "dashboard-epitech-7167a.firebaseapp.com",
     databaseURL: "https://dashboard-epitech-7167a.firebaseio.com",
@@ -16,13 +16,18 @@ var config = {
 };
 firebase.initializeApp(config);
 
+let result = 12;
+let err = {code: false, msg: ""};
+let widget = {meteo: {state: false, data: {}}, etage: result};
+let user = {state: false};
+
 let openweathermeteo = function(city, callback){
-    var  url = 'http://api.openweathermap.org/data/2.5/weather?q='+city+'&units=metric&lang=fr&appid=521c8f8246c012c8421856de66e06c2a';
+    let  url = 'http://api.openweathermap.org/data/2.5/weather?q='+city+'&units=metric&lang=fr&appid=521c8f8246c012c8421856de66e06c2a';
 
     request(url, function(err, response, body){
         try{
-            var result = JSON.parse(body);
-            var previsions = {
+            let result = JSON.parse(body);
+            let previsions = {
                 temperature : result.main.temp,
                 city : result.name,
                 state : result.weather[0].description
@@ -34,9 +39,6 @@ let openweathermeteo = function(city, callback){
         }
     });
 };
-let result = 12;
-let err = {code: false, msg: ""};
-let widget = {meteo: {state: false, data: {}}, etage: result};
 
 function askMeteo(city) {
     openweathermeteo(city, function(err, previsions){
@@ -59,7 +61,10 @@ app.use(session({secret: 'dashboard'}))
     })
 
     .get('/main', function (req, res) {
-        res.render("main_view.ejs", {widget});
+        if (user.state)
+            res.render("main_view.ejs", {widget});
+        else
+            res.redirect("/login");
     })
 
     .post('/signin/', urlencodedParser, function(req, res) {
@@ -67,8 +72,8 @@ app.use(session({secret: 'dashboard'}))
             firebase.auth().signInWithEmailAndPassword(req.body.email, req.body.passwd).then((e) => {
                 res.redirect("/main");
             }).catch(function(error) {
-                var errorCode = error.code;
-                var errorMessage = error.message;
+                let errorCode = error.code;
+                let errorMessage = error.message;
                 err.code = true;
                 err.msg = errorMessage;
                 res.redirect("/login");
@@ -87,8 +92,8 @@ app.use(session({secret: 'dashboard'}))
                 firebase.auth().createUserWithEmailAndPassword(req.body.email, req.body.passwd).then((e) => {
                     res.redirect("/main");
                 }).catch(function(error) {
-                    var errorCode = error.code;
-                    var errorMessage = error.message;
+                    let errorCode = error.code;
+                    let errorMessage = error.message;
                     err.code = true;
                     err.msg = errorMessage;
                     res.redirect("/login");
