@@ -51,7 +51,7 @@ function askMeteo(city) {
 
 function wichWidget() {
     if (widget.meteo.state === true) {
-        widget.meteo.data = openweathermeteo(city);
+        widget.meteo.data = askMeteo('Paris');
     }
 }
 
@@ -59,35 +59,43 @@ app.use(session({secret: 'dashboard'}))
 
     .get('/login', function(req, res) {
         if (store.get('user') != null)
-            res.redirect("/main");
+            res.redirect('/main');
         else
-            res.render("log.ejs", {err});
+            res.render('log.ejs', {err});
     })
 
     .get('/main', function (req, res) {
+        wichWidget();
         if (store.get('user') != null)
-            res.render("main_view.ejs", {widget});
+            res.render('main_view.ejs', {widget});
         else
-            res.redirect("/login");
+            res.redirect('/login');
+    })
+
+    .get('/settings', function (req, res) {
+        if (store.get('user') != null)
+            res.render('settings.ejs', {widget});
+        else
+            res.redirect('/login');
     })
 
     .post('/signin/', urlencodedParser, function(req, res) {
         if (req.body.email !== '' && req.body.passwd) {
             firebase.auth().signInWithEmailAndPassword(req.body.email, req.body.passwd).then((e) => {
                 store.set('user', { data: e });
-                res.redirect("/main");
+                res.redirect('/main');
             }).catch(function(error) {
                 let errorCode = error.code;
                 let errorMessage = error.message;
                 err.code = true;
                 err.msg = errorMessage;
-                res.redirect("/login");
+                res.redirect('/login');
             });
         }
         else {
             err.code = true;
             err.msg = "Need an email and a password!";
-            res.redirect("/login");
+            res.redirect('/login');
         }
     })
 
@@ -96,24 +104,33 @@ app.use(session({secret: 'dashboard'}))
                 console.log(req.body.email, " ", req.body.passwd);
                 firebase.auth().createUserWithEmailAndPassword(req.body.email, req.body.passwd).then((e) => {
                     store.set('user', { data: e });
-                    res.redirect("/main");
+                    res.redirect('/main');
                 }).catch(function(error) {
                     let errorCode = error.code;
                     let errorMessage = error.message;
                     err.code = true;
                     err.msg = errorMessage;
-                    res.redirect("/login");
+                    res.redirect('/login');
                 });
             }
             else {
                 err.code = true;
                 err.msg = "Need an email and a password!";
-                res.redirect("/login");
+                res.redirect('/login');
             }
     })
+    
+    .post('/signout/', urlencodedParser, function (req, res) {
+        store.remove('user');
+        res.redirect('/login');
+    })
 
+    .post('/settings/', urlencodedParser, function (req, res) {
+        res.redirect('/settings');
+    })
+    
     .use(function(req, res, next){
-        res.redirect("/login");
+        res.redirect('/login');
     });
 
 app.listen(process.env.PORT || 8080);
