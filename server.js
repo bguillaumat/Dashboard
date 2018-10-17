@@ -1,7 +1,6 @@
 var express = require('express');
 var request = require('request');
 var app = express();
-var path = require('path');
 var session = require('cookie-session');
 var bodyParser = require('body-parser');
 var urlencodedParser = bodyParser.urlencoded({ extended: false });
