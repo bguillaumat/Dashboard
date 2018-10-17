@@ -51,7 +51,7 @@ function askMeteo(city) {
 
 function wichWidget() {
     if (widget.meteo.state === true) {
-        widget.meteo.data = openweathermeteo(city);
+        widget.meteo.data = askMeteo('Paris');
     }
 }
 
@@ -65,6 +65,7 @@ app.use(session({secret: 'dashboard'}))
     })
 
     .get('/main', function (req, res) {
+        wichWidget();
         if (store.get('user') != null)
             res.render('main_view.ejs', {widget});
         else
