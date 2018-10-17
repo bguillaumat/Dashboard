@@ -19,9 +19,9 @@
             <p>Vous etes tres haut!</p>
         <% } %>
         <%if (widget.meteo.state == true) { %>
-            <div class="card shadow-lg p-3 mb-5 bg-white rounded">
+            <div class="card shadow p-3 mb-5 rounded" style="background-color: #48a999">
                 <div class="card-body">
-
+                    <%= widget.meteo.data.city %>
                 </div>
             </div>
         <% } %>
