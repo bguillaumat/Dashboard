@@ -19,7 +19,7 @@ firebase.initializeApp(config);
 
 let result = 12;
 let err = {code: false, msg: ""};
-let widget = {meteo: {state: true, data: {}}, etage: result};
+let widget = {meteo: {state: true, data: {city: '', temp: '', state: ''}}, etage: result};
 let user = {state: false};
 
 let openweathermeteo = function(city, callback){
@@ -45,13 +45,15 @@ function askMeteo(city) {
     openweathermeteo(city, function(err, previsions){
         if(err) return console.log(err);
         console.log('A ' + previsions.city + ', la température est de ' + previsions.temperature + '°C avec ' + previsions.state);
-        return previsions;
+        widget.meteo.data.city = previsions.city;
+        widget.meteo.data.temp = previsions.temperature;
+        widget.meteo.data.state = previsions.state;
     });
 }
 
 function wichWidget() {
     if (widget.meteo.state === true) {
-        widget.meteo.data = askMeteo('Paris');
+        askMeteo('Paris');
     }
 }
 
