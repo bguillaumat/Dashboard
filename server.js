@@ -7,9 +7,6 @@ var bodyParser = require('body-parser');
 var urlencodedParser = bodyParser.urlencoded({ extended: false });
 var firebase = require("firebase");
 
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
-
 var config = {
     apiKey: "AIzaSyBFkGiSYcEVGWoeKFfdOz6lvZ4sdYkOhC4",
     authDomain: "dashboard-epitech-7167a.firebaseapp.com",
