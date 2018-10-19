@@ -23,7 +23,7 @@ let widget = {meteo: {state: true, data: {city: 'Paris', temp: '', state: ''}}, 
 let user = {state: false};
 
 let openweathermeteo = function(city, callback){
-    let  url = 'http://api.openweathermap.org/data/2.5/weather?q='+city+'&units=metric&lang=fr&appid=521c8f8246c012c8421856de66e06c2a';
+    let  url = 'http://api.openweathermap.org/data/2.5/weather?q='+city+'&units=metric&appid=521c8f8246c012c8421856de66e06c2a';
 
     request(url, function(err, response, body){
         try{
@@ -64,6 +64,21 @@ function logout() {
     document.signoutForm.submit();
 }
 
+function getPermissions() {
+    firebase.firestore().collection('Users').doc(store.get('user').data.user.uid)
+        .get()
+        .then(doc => {
+            if (!doc.exists) {
+                console.log('No such document!');
+            } else {
+                console.log(doc.data().meteo);
+            }
+        })
+        .catch(err => {
+            console.log('Error getting document', err);
+        });
+}
+
 app.use(session({secret: 'dashboard'}))
 
     .get('/login', function(req, res) {
@@ -74,9 +89,11 @@ app.use(session({secret: 'dashboard'}))
     })
 
     .get('/main', function (req, res) {
-        wichWidget();
-        if (store.get('user') != null)
+        if (store.get('user') != null) {
+            getPermissions();
+            wichWidget();
             res.render('main_view.ejs', {widget});
+        }
         else
             res.redirect('/login');
     })
@@ -110,7 +127,6 @@ app.use(session({secret: 'dashboard'}))
 
     .post('/signup/', urlencodedParser, function (req, res) {
             if (req.body.email !== '' && req.body.passwd) {
-                console.log(req.body.email, " ", req.body.passwd);
                 firebase.auth().createUserWithEmailAndPassword(req.body.email, req.body.passwd).then((e) => {
                     store.set('user', { data: e });
                     res.redirect('/main');
