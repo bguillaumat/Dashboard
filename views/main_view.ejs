@@ -11,18 +11,20 @@
             <form method="post" action="/signout/" name="signoutForm">
                 <a class="navbar-brand" style="color: #ffffff" href="#" onclick="document.signoutForm.submit()">Logout</a>
             </form>
-            <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-                <li class="nav-item">
-                    <a class="nav-link" href="#"><i class="fa fa-cog" style="color: #ffffff"></i></a>
-                </li>
-            </ul>
+            <form method="post" action="/settings/" name="settingsForm">
+                <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"><i class="fa fa-cog" style="color: #ffffff" onclick="document.settingsForm.submit()"></i></a>
+                    </li>
+                </ul>
+            </form>
         </nav>
         <%if (widget.meteo.state == true) { %>
             <div class="card shadow p-3 mb-5 rounded" style="background-color: #48a999;">
                 <div class="card-body">
                     <%= widget.meteo.data.city %>
-                    <%= widget.meteo.data.temp %>
-                    <% if (widget.meteo.data.state == "ciel dégagé") { %>
+                    <%= widget.meteo.data.temp + '°C'%>
+                    <% if (widget.meteo.data.state == "Clear") { %>
                         <img src="http://www.vues.du.ciel.free.fr/wp-content/uploads/dsc00690.jpg">
                     <% } %>
                 </div>

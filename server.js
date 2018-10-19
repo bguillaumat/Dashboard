@@ -19,8 +19,7 @@ firebase.initializeApp(config);
 
 let result = 12;
 let err = {code: false, msg: ""};
-let widget = {meteo: {state: true, data: {city: 'Paris', temp: '', state: ''}}, etage: result};
-let user = {state: false};
+let widget = {meteo: {state: false, data: {city: 'Paris', temp: '', state: ''}}, etage: result};
 
 let openweathermeteo = function(city, callback){
     let  url = 'http://api.openweathermap.org/data/2.5/weather?q='+city+'&units=metric&appid=521c8f8246c012c8421856de66e06c2a';
@@ -33,7 +32,7 @@ let openweathermeteo = function(city, callback){
             let previsions = {
                 temperature : result.main.temp,
                 //city : result.name,
-                state : result.weather[0].description
+                state : result.weather[0].main
             };
 
             callback(null, previsions);
@@ -44,39 +43,26 @@ let openweathermeteo = function(city, callback){
 };
 
 function askMeteo(city) {
-    openweathermeteo(city, function(err, previsions){
-        if(err) return console.log(err);
-        if (previsions.temperature != null) {
-            //widget.meteo.data.city = previsions.city;
-            widget.meteo.data.temp = previsions.temperature;
-            widget.meteo.data.state = previsions.state;
-        }
-    });
+    return new Promise(resolve =>
+        openweathermeteo(city, function(err, previsions){
+            if(err) return console.log("This error: ",err);
+            if (previsions.temperature != null) {
+                //widget.meteo.data.city = previsions.city;
+                widget.meteo.data.temp = previsions.temperature;
+                widget.meteo.data.state = previsions.state;
+                resolve('main_view.ejs');
+            }
+        })
+    )
 }
 
 function wichWidget() {
-    if (widget.meteo.state === true) {
-        askMeteo(widget.meteo.city);
-    }
-}
-
-function logout() {
-    document.signoutForm.submit();
-}
-
-function getPermissions() {
-    firebase.firestore().collection('Users').doc(store.get('user').data.user.uid)
-        .get()
-        .then(doc => {
-            if (!doc.exists) {
-                console.log('No such document!');
-            } else {
-                console.log(doc.data().meteo);
-            }
-        })
-        .catch(err => {
-            console.log('Error getting document', err);
-        });
+    return new Promise(async resolve => {
+        if (widget.meteo.state === true) {
+            await askMeteo(widget.meteo.data.city);
+        }
+        resolve(true);
+    });
 }
 
 app.use(session({secret: 'dashboard'}))
@@ -88,11 +74,31 @@ app.use(session({secret: 'dashboard'}))
             res.render('log.ejs', {err});
     })
 
-    .get('/main', function (req, res) {
+    .get('/main', async function (req, res) {
         if (store.get('user') != null) {
-            getPermissions();
-            wichWidget();
+            await wichWidget();
             res.render('main_view.ejs', {widget});
+        }
+        else
+            res.redirect('/login');
+    })
+
+    .get('/permissions', function (req, res) {
+        if (store.get('user') != null) {
+            firebase.firestore().collection('Users').doc(store.get('user').data.user.uid)
+                .get()
+                .then(doc => {
+                    if (!doc.exists) {
+                        console.log('No such document!');
+                        res.redirect('/main');
+                    } else {
+                        widget.meteo.state = doc.data().meteo;
+                        res.redirect('/main');
+                    }
+                })
+                .catch(err => {
+                    console.log('Error getting document', err);
+                });
         }
         else
             res.redirect('/login');
@@ -105,11 +111,18 @@ app.use(session({secret: 'dashboard'}))
             res.redirect('/login');
     })
 
+    .get('/createuser', function (req, res) {
+        if (store.get('user') != null)
+            res.redirect('/permissions');
+        else
+            res.redirect('/login');
+    })
+
     .post('/signin/', urlencodedParser, function(req, res) {
         if (req.body.email !== '' && req.body.passwd) {
             firebase.auth().signInWithEmailAndPassword(req.body.email, req.body.passwd).then((e) => {
                 store.set('user', { data: e });
-                res.redirect('/main');
+                res.redirect('/permissions');
             }).catch(function(error) {
                 let errorCode = error.code;
                 let errorMessage = error.message;
@@ -129,7 +142,7 @@ app.use(session({secret: 'dashboard'}))
             if (req.body.email !== '' && req.body.passwd) {
                 firebase.auth().createUserWithEmailAndPassword(req.body.email, req.body.passwd).then((e) => {
                     store.set('user', { data: e });
-                    res.redirect('/main');
+                    res.redirect('/createuser');
                 }).catch(function(error) {
                     let errorCode = error.code;
                     let errorMessage = error.message;
