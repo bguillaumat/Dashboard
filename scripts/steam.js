@@ -7,9 +7,9 @@ exports.steamName = function(id, callback) {
         try{
             let result = JSON.parse(body);
             if (result == null)
-                return null;
-            callback(null, Object.values(result)[0].data.name);
-            callback(null, null);
+                callback(null, null);
+            else
+                callback(null, Object.values(result)[0].data.name);
         }catch(e){
             callback(e);
         }
@@ -28,14 +28,14 @@ exports.askSteamName = function(id) {
     )
 };
 
-exports.steam = function(id, callback){
+exports.steam = function(id, name, callback){
     let  url = 'http://api.steampowered.com/ISteamUserStats/GetNumberOfCurrentPlayers/v0001/?appid='+id+'&key=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX';
 
     request(url, function(err, response, body){
         try{
             let result = JSON.parse(body);
-            if (result.response.player_count === "42" || result.response.player_count === "12313450")
-                return null;
+            if (name == null)
+                callback(null, null);
             callback(null, result.response.player_count);
         }catch(e){
             callback(e);
@@ -43,9 +43,9 @@ exports.steam = function(id, callback){
     });
 };
 
-exports.askSteam = function(id) {
+exports.askSteam = function(id, name) {
     return new Promise(resolve =>
-        this.steam(id, function(err, playersNbr){
+        this.steam(id, name, function(err, playersNbr){
             if(err) return console.log("This error: ",err);
             if (playersNbr != null) {
                 resolve(playersNbr);

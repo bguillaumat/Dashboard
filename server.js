@@ -1,5 +1,4 @@
 let express = require('express');
-let request = require('request');
 let app = express();
 let session = require('cookie-session');
 let bodyParser = require('body-parser');
@@ -8,9 +7,6 @@ let store = require('store');
 let firebase = require("firebase");
 let steam = require("./scripts/steam");
 let weather = require("./scripts/weather");
-
-//https://store.steampowered.com/api/appdetails?appids=57690
-
 let config = {
     apiKey: "AIzaSyBFkGiSYcEVGWoeKFfdOz6lvZ4sdYkOhC4",
     authDomain: "dashboard-epitech-7167a.firebaseapp.com",
@@ -20,23 +16,27 @@ let config = {
     messagingSenderId: "256937319284"
 };
 firebase.initializeApp(config);
-
 let db = firebase.firestore();
 let err = {code: false, msg: ""};
 let widget = {meteo: {state: false, data: {city: 'Paris', temp: '', state: '', icon: ''}},
     steam: {state: false, data: {players: '', id: '578080', name: ''}}};
 
+
 function wichWidget() {
     return new Promise(async resolve => {
         if (widget.meteo.state) {
             let prevision = await weather.askMeteo(widget.meteo.data.city);
-            widget.meteo.data.icon = prevision.icon;
-            widget.meteo.data.temp = prevision.temperature;
-            widget.meteo.data.state = prevision.state;
+            if (prevision != null) {
+                widget.meteo.data.icon = prevision.icon;
+                widget.meteo.data.temp = prevision.temperature;
+                widget.meteo.data.state = prevision.state;
+            }
+            else
+                widget.meteo.data.temp = null;
         }
         if (widget.steam.state) {
-            widget.steam.data.players = await steam.askSteam(widget.steam.data.id);
             widget.steam.data.name = await steam.askSteamName(widget.steam.data.id);
+            widget.steam.data.players = await steam.askSteam(widget.steam.data.id, widget.steam.data.name);
         }
         resolve(true);
     });
@@ -150,6 +150,7 @@ app.use(session({secret: 'dashboard'}))
     })
     
     .post('/signout/', urlencodedParser, function (req, res) {
+        firebase.auth().signOut();
         store.remove('user');
         res.redirect('/login');
     })
@@ -160,6 +161,24 @@ app.use(session({secret: 'dashboard'}))
 
     .post('/main/', urlencodedParser, function (req, res) {
         res.redirect('/main');
+    })
+    
+    .post('/updateMeteo/', urlencodedParser, function (req, res) {
+        widget.meteo.state = req.body.mState === "on";
+        if (req.body.location !== '')
+            widget.meteo.data.city = req.body.location;
+        res.redirect('/settings');
+    })
+
+    .post('/updateSteam/', urlencodedParser, async function (req, res) {
+        widget.steam.state = req.body.sState === "on";
+        if (req.body.id !== '') {
+            widget.steam.data.id = req.body.id;
+            widget.steam.data.name = await steam.askSteamName(widget.steam.data.id);
+        }
+        if (widget.steam.data.name == null)
+            widget.steam.data.name = '';
+        res.redirect('/settings');
     })
     
     .use(function(req, res, next){
