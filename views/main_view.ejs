@@ -24,9 +24,18 @@
                 <div class="card-body">
                     <%= widget.meteo.data.city %>
                     <%= widget.meteo.data.temp + '°C'%>
-                    <% if (widget.meteo.data.state == "Clear") { %>
+                    <%= widget.meteo.data.state %>
+                <% if (widget.meteo.data.state == "Clear") { %>
                         <img src="http://www.vues.du.ciel.free.fr/wp-content/uploads/dsc00690.jpg">
                     <% } %>
+                </div>
+            </div>
+        <% } %>
+        <%if (widget.steam.state == true && widget.steam.data.players != '') { %>
+            <div class="card shadow p-3 mb-5 rounded" style="background-color: #48a999;">
+                <div class="card-body">
+                    <%= widget.steam.data.id %>
+                    <%= widget.steam.data.players + ' players'%>
                 </div>
             </div>
         <% } %>

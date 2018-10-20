@@ -17,9 +17,37 @@ let config = {
 };
 firebase.initializeApp(config);
 
-let result = 12;
+let db = firebase.firestore();
 let err = {code: false, msg: ""};
-let widget = {meteo: {state: false, data: {city: 'Paris', temp: '', state: ''}}, etage: result};
+let widget = {meteo: {state: false, data: {city: 'Paris', temp: '', state: ''}},
+    steam: {state: false, data: {players: '', id: '578080'}}};
+
+let steam = function(id, callback){
+    let  url = 'http://api.steampowered.com/ISteamUserStats/GetNumberOfCurrentPlayers/v0001/?appid='+id+'&key=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX';
+
+    request(url, function(err, response, body){
+        try{
+            let result = JSON.parse(body);
+            if (result.response.player_count === "42" || result.response.player_count === "12313450")
+                return null;
+            callback(null, result.response.player_count);
+        }catch(e){
+            callback(e);
+        }
+    });
+};
+
+function askSteam(id) {
+    return new Promise(resolve =>
+        steam(id, function(err, playersNbr){
+            if(err) return console.log("This error: ",err);
+            if (playersNbr != null) {
+                widget.steam.data.players = playersNbr;
+            }
+            resolve(true);
+        })
+    )
+}
 
 let openweathermeteo = function(city, callback){
     let  url = 'http://api.openweathermap.org/data/2.5/weather?q='+city+'&units=metric&appid=521c8f8246c012c8421856de66e06c2a';
@@ -50,16 +78,19 @@ function askMeteo(city) {
                 //widget.meteo.data.city = previsions.city;
                 widget.meteo.data.temp = previsions.temperature;
                 widget.meteo.data.state = previsions.state;
-                resolve('main_view.ejs');
             }
+            resolve(true);
         })
     )
 }
 
 function wichWidget() {
     return new Promise(async resolve => {
-        if (widget.meteo.state === true) {
+        if (widget.meteo.state) {
             await askMeteo(widget.meteo.data.city);
+        }
+        if (widget.steam.state) {
+            await askSteam(widget.steam.data.id);
         }
         resolve(true);
     });
@@ -83,21 +114,27 @@ app.use(session({secret: 'dashboard'}))
             res.redirect('/login');
     })
 
+    .get('/about.json', function (req, res) {
+        if (store.get('user') != null)
+            res.render('json.ejs');
+        else
+            res.render('log.ejs', {err});
+    })
+
     .get('/permissions', function (req, res) {
         if (store.get('user') != null) {
-            firebase.firestore().collection('Users').doc(store.get('user').data.user.uid)
+            db.collection('Users').doc(store.get('user').data.user.uid)
                 .get()
                 .then(doc => {
                     if (!doc.exists) {
-                        console.log('No such document!');
                         res.redirect('/main');
                     } else {
                         widget.meteo.state = doc.data().meteo;
+                        widget.steam.state = doc.data().steam;
                         res.redirect('/main');
                     }
                 })
                 .catch(err => {
-                    console.log('Error getting document', err);
                 });
         }
         else
@@ -113,7 +150,15 @@ app.use(session({secret: 'dashboard'}))
 
     .get('/createuser', function (req, res) {
         if (store.get('user') != null)
-            res.redirect('/permissions');
+            db.collection("Users").doc(store.get('user').data.user.uid).set({
+                meteo: false,
+                steam: false,
+            })
+                .then(function() {
+                    res.redirect('/permissions');
+                })
+                .catch(function(error) {
+                });
         else
             res.redirect('/login');
     })
