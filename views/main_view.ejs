@@ -20,9 +20,9 @@
                 </ul>
             </form>
         </nav>
-        <div class="card-columns">
+        <div class="card-columns m-3">
             <%if (widget.meteo.state == true && widget.meteo.data.temp != null) { %>
-                <div class="card shadow m-3 rounded" style="background-color: #ffffff;">
+                <div class="card shadow rounded" style="background-color: #ffffff;">
                     <div class="card-header" style="background-color: #6200ee;color: #ffffff;">
                         Weather: What is the weather like in <i class="font-weight-bold"><%= widget.meteo.data.city %></i>, today ?
                     </div>
@@ -37,7 +37,7 @@
                 </div>
             <% } %>
             <%if (widget.steam.state == true && widget.steam.data.players != null) { %>
-                <div class="card shadow m-3 rounded" style="background-color: #ffffff;">
+                <div class="card shadow rounded" style="background-color: #ffffff;">
                     <div class="card-header" style="background-color: #6200ee;color: #ffffff;">
                         Steam: How many players are playing <i class="font-weight-bold"><%= widget.steam.data.name %></i> ?
                     </div>
@@ -47,7 +47,50 @@
                     </div>
                 </div>
             <% } %>
-
+            <% if (widget.ytLast.state || widget.ytSub.state || widget.ytViews.state) { %>
+                <% if (widget.ytViews.state) { %>
+                    <div class="card shadow rounded">
+                        <div class="card-header" style="background-color: #6200ee;color: #ffffff;">
+                            <img src="https://www.freeiconspng.com/uploads/youtube-logo-icon-symbol-18.png" width="50" height="50">
+                            Number of views for <%= widget.ytViews.data.name %>
+                        </div>
+                        <div class="card-body">
+                            <iframe style="width: 100%" src="<%= 'https://www.youtube.com/embed/' + widget.ytViews.data.id %>" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                        </div>
+                        <div class="card-footer text-center">
+                            <%= widget.ytViews.data.name %> has been viewed <%= widget.ytViews.data.views %> times.
+                        </div>
+                    </div>
+                <% } %>
+                <% if (widget.ytSub.state) { %>
+                    <div class="card shadow rounded">
+                        <div class="card-header" style="background-color: #6200ee;color: #ffffff;">
+                            <img src="https://www.freeiconspng.com/uploads/youtube-logo-icon-symbol-18.png" width="50" height="50">
+                            Number of subscribers for <%= widget.ytSub.data.name %>
+                        </div>
+                        <div class="card-body text-center">
+                            Channel <%= widget.ytSub.data.name %> has <%= widget.ytViews.data.views %> subscribers.
+                        </div>
+                    </div>
+                <% } %>
+                <% if (widget.ytLast.state) { %>
+                    <div class="card shadow rounded">
+                        <div class="card-header" style="background-color: #6200ee;color: #ffffff;">
+                            <img src="https://www.freeiconspng.com/uploads/youtube-logo-icon-symbol-18.png" width="50" height="50">
+                            <%= widget.ytLast.data.nbr %> last comment for <%= widget.ytLast.data.name %>
+                        </div>
+                        <div class="card-body">
+                            <iframe style="width: 100%" src="<%= 'https://www.youtube.com/embed/' + widget.ytLast.data.id %>" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                        </div>
+                        <div class="card-footer">
+                            <% for (let i = 0; i < widget.ytLast.data.nbr; i++) { %>
+                                <div><%= widget.ytLast.data.comments[i] %></div><br>
+                            <% } %>
+                        </div>
+                    </div>
+                <% } %>
+                
+            <% } %>
         </div>
     </body>
 </html>
