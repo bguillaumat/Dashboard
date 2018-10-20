@@ -45,7 +45,7 @@
                     </div>
                     <img class="card-img-bottom" src="<%= 'https://steamcdn-a.akamaihd.net/steam/apps/' + widget.steam.data.id +'/header.jpg' %>">
                     <div class="card-body text-center">
-                        <%= widget.steam.data.players.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ") + ' players are currently playing in ' + widget.steam.data.name %>
+                        <i class="font-weight-bold"><%= widget.steam.data.players.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ")%></i> players are currently playing in <i class="font-weight-bold"><%= widget.steam.data.name %></i>
                     </div>
                 </div>
             <% } %>
@@ -54,13 +54,13 @@
                     <div class="card shadow rounded">
                         <div class="card-header" style="background-color: #6200ee;color: #ffffff;">
                             <img src="https://www.freeiconspng.com/uploads/youtube-logo-icon-symbol-18.png" width="30" height="30">
-                            Number of views for <%= widget.ytViews.data.name %>
+                            Number of views for <i class="font-weight-bold"><%= widget.ytViews.data.name %></i>
                         </div>
                         <div class="card-body">
                             <iframe style="width: 100%" src="<%= 'https://www.youtube.com/embed/' + widget.ytViews.data.id %>" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
                         </div>
                         <div class="card-footer text-center">
-                            <%= widget.ytViews.data.name %> has been viewed <%= widget.ytViews.data.views %> times.
+                            <i class="font-weight-bold"><%= widget.ytViews.data.name %></i> has been viewed <i class="font-weight-bold"><%= widget.ytViews.data.views %></i> times.
                         </div>
                     </div>
                 <% } %>
@@ -68,10 +68,10 @@
                     <div class="card shadow rounded">
                         <div class="card-header" style="background-color: #6200ee;color: #ffffff;">
                             <img src="https://www.freeiconspng.com/uploads/youtube-logo-icon-symbol-18.png" width="30" height="30">
-                            Number of subscribers for <%= widget.ytSub.data.name %>
+                            Number of subscribers for <i class="font-weight-bold"><%= widget.ytSub.data.name %></i>
                         </div>
                         <div class="card-body text-center">
-                            Channel <%= widget.ytSub.data.name %> has <%= widget.ytSub.data.subs %> subscribers.
+                            Channel <i class="font-weight-bold"><%= widget.ytSub.data.name %></i> has <i class="font-weight-bold"><%= widget.ytSub.data.subs %></i> subscribers.
                         </div>
                     </div>
                 <% } %>
@@ -79,7 +79,7 @@
                     <div class="card shadow rounded">
                         <div class="card-header" style="background-color: #6200ee;color: #ffffff;">
                             <img src="https://www.freeiconspng.com/uploads/youtube-logo-icon-symbol-18.png" width="30" height="30">
-                            <%= widget.ytLast.data.nbr %> last comment for <%= widget.ytLast.data.name %>
+                            <i class="font-weight-bold"><%= widget.ytLast.data.nbr %></i> last comment for <i class="font-weight-bold"><%= widget.ytLast.data.name %></i>
                         </div>
                         <div class="card-body">
                             <iframe style="width: 100%" src="<%= 'https://www.youtube.com/embed/' + widget.ytLast.data.id %>" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
