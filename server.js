@@ -6,8 +6,8 @@ let urlencodedParser = bodyParser.urlencoded({ extended: false });
 let store = require('store');
 let firebase = require('firebase');
 let steam = require('./scripts/steam');
-let weather = require('./scripts/weather');
 let yt = require('./scripts/youtube');
+let widgets = require('./scripts/widgets');
 let config = {
     apiKey: "AIzaSyBFkGiSYcEVGWoeKFfdOz6lvZ4sdYkOhC4",
     authDomain: "dashboard-epitech-7167a.firebaseapp.com",
@@ -19,24 +19,19 @@ let config = {
 firebase.initializeApp(config);
 let db = firebase.firestore();
 let err = {code: false, msg: ""};
-let widget = {meteo: {state: false, data: {city: 'Paris', temp: '', state: '', icon: ''}},
-    steam: {state: false, data: {players: '', id: '578080', name: ''}},
-    ytSub: {state: true, data: {id: 'UCUaHJ0fTA-1theR8A8Polmw', name: '', subs: ''}},
-    ytViews: {state: true, data: {id: 'KcgGS3EvKYA', name: '', views: ''}},
-    ytLast: {state: true, data: {id: 'KcgGS3EvKYA', nbr: 5, name: '', comments: []}}};
-
+let widget = {meteo: {state: false, data: {city: 'Paris', temp: '', state: '', icon: ''}, timer: 60},
+    steam: {state: false, data: {players: '', id: '578080', name: ''}, timer: 60},
+    ytSub: {state: true, data: {id: 'UCUaHJ0fTA-1theR8A8Polmw', name: '', subs: ''}, timer: 60},
+    ytViews: {state: true, data: {id: 'KcgGS3EvKYA', name: '', views: ''}, timer: 60},
+    ytLast: {state: true, data: {id: 'KcgGS3EvKYA', nbr: 5, name: '', comments: []}, timer: 60}};
 
 function wichWidget() {
     return new Promise(async resolve => {
         if (widget.meteo.state) {
-            let prevision = await weather.askMeteo(widget.meteo.data.city);
-            if (prevision != null) {
-                widget.meteo.data.icon = prevision.icon;
-                widget.meteo.data.temp = prevision.temperature;
-                widget.meteo.data.state = prevision.state;
-            }
-            else
-                widget.meteo.data.temp = null;
+            await widgets.meteo(widget);
+            setInterval(async function () {
+                await widgets.meteo(widget);
+            }, widget.meteo.timer * 100);
         }
         if (widget.steam.state) {
             widget.steam.data.name = await steam.askSteamName(widget.steam.data.id);
@@ -61,9 +56,10 @@ function wichWidget() {
                 widget.ytViews.data.views = null;
         }
         if (widget.ytLast) {
+            let data = await yt.askViews(widget.ytLast.data.id);
             widget.ytLast.data.comments = await yt.askComments(widget.ytLast.data.id, widget.ytLast.data.nbr);
+            widget.ytLast.data.name = data.name;
         }
-        console.log(widget);
         resolve(true);
     });
 }
