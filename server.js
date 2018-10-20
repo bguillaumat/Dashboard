@@ -4,9 +4,10 @@ let session = require('cookie-session');
 let bodyParser = require('body-parser');
 let urlencodedParser = bodyParser.urlencoded({ extended: false });
 let store = require('store');
-let firebase = require("firebase");
-let steam = require("./scripts/steam");
-let weather = require("./scripts/weather");
+let firebase = require('firebase');
+let steam = require('./scripts/steam');
+let weather = require('./scripts/weather');
+let yt = require('./scripts/youtube');
 let config = {
     apiKey: "AIzaSyBFkGiSYcEVGWoeKFfdOz6lvZ4sdYkOhC4",
     authDomain: "dashboard-epitech-7167a.firebaseapp.com",
@@ -19,7 +20,10 @@ firebase.initializeApp(config);
 let db = firebase.firestore();
 let err = {code: false, msg: ""};
 let widget = {meteo: {state: false, data: {city: 'Paris', temp: '', state: '', icon: ''}},
-    steam: {state: false, data: {players: '', id: '578080', name: ''}}};
+    steam: {state: false, data: {players: '', id: '578080', name: ''}},
+    ytSub: {state: false, data: {id: 'UCUaHJ0fTA-1theR8A8Polmw', name: '', subs: ''}},
+    ytViews: {state: false, data: {id: 'KcgGS3EvKYA', name: '', views: ''}},
+    ytLast: {state: false, data: {id: 'KcgGS3EvKYA', nbr: 5, name: '', comments: []}}};
 
 
 function wichWidget() {
@@ -36,8 +40,30 @@ function wichWidget() {
         }
         if (widget.steam.state) {
             widget.steam.data.name = await steam.askSteamName(widget.steam.data.id);
-            widget.steam.data.players = await steam.askSteam(widget.steam.data.id, widget.steam.data.name);
+            widget.steam.data.players = await steam.askSteam(widget.steam.data.id, widget.steam.data.name).toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
         }
+        if (widget.ytSub) {
+            let data = await yt.askChannel(widget.ytSub.data.id);
+            if (data) {
+                widget.ytSub.data.name = data.name;
+                widget.ytSub.data.subs = data.subs.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+            }
+            else
+                widget.ytSub.data.subs = null;
+        }
+        if (widget.ytViews) {
+            let data = await yt.askViews(widget.ytViews.data.id);
+            if (data) {
+                widget.ytViews.data.name = data.name;
+                widget.ytViews.data.views = data.views.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+            }
+            else
+                widget.ytViews.data.views = null;
+        }
+        if (widget.ytLast) {
+            widget.ytLast.data.comments = await yt.askComments(widget.ytLast.data.id, widget.ytLast.data.nbr);
+        }
+        console.log(widget);
         resolve(true);
     });
 }
