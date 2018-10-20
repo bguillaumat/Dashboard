@@ -157,6 +157,10 @@ app.use(session({secret: 'dashboard'}))
     .post('/settings/', urlencodedParser, function (req, res) {
         res.redirect('/settings');
     })
+
+    .post('/main/', urlencodedParser, function (req, res) {
+        res.redirect('/main');
+    })
     
     .use(function(req, res, next){
         res.redirect('/login');
