@@ -40,7 +40,7 @@ function wichWidget() {
         }
         if (widget.steam.state) {
             widget.steam.data.name = await steam.askSteamName(widget.steam.data.id);
-            widget.steam.data.players = await steam.askSteam(widget.steam.data.id, widget.steam.data.name).toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+            widget.steam.data.players = await steam.askSteam(widget.steam.data.id, widget.steam.data.name);
         }
         if (widget.ytSub) {
             let data = await yt.askChannel(widget.ytSub.data.id);
