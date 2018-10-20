@@ -30,11 +30,7 @@
                         <%= 'It\'s ' + widget.meteo.data.temp + '°C.'%>
                         <div>
                             The Weather is <%= widget.meteo.data.state %>
-                            <% if (widget.meteo.data.state == "Mist") { %>
-                                <i class="fa fa-cloud"></i>
-                            <% } else if (widget.meteo.data.state == "Clear") { %>
-                                <i class="fa fa-cloud-sun"></i>
-                            <% } %>
+                            <img src="<%= 'http://openweathermap.org/img/w/' + widget.meteo.data.icon + '.png' %>">
                         </div>
                     </div>
                 </div>

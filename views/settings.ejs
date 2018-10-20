@@ -1,15 +1,53 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/titatoggle/2.1.2/titatoggle-dist.css" crossorigin="anonymous">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Settings</title>
 </head>
-<body>
-    <div>
-        Météo
+<body style="background-color: #ffffff">
+<nav class="navbar sticky-top navbar-light shadow" style="background-color: #3700B3;">
+    <form method="post" action="/signout/" name="signoutForm">
+        <a class="navbar-brand" style="color: #ffffff" href="#" onclick="document.signoutForm.submit()">Logout</a>
+    </form>
+    <form method="post" action="/main/" name="mainForm">
+        <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+            <li class="nav-item">
+                <a class="nav-link" href="#"><i class="fa fa-backward" style="color: #ffffff" onclick="document.settingsForm.submit()"></i></a>
+            </li>
+        </ul>
+    </form>
+</nav>
+
+<div class="card-group">
+    <div class="card shadow m-3 rounded" style="background-color: #ffffff;">
+        <div class="card-header" style="background-color: #6200ee;color: #ffffff;">
+            Weather: What is the weather like in <i class="font-weight-bold"><%= widget.meteo.data.city %></i>, today ?
+            <div class="checkbox checkbox-slider--b-flat">
+                <label>
+                    <input type="checkbox"><span></span>
+                </label>
+            </div>
+        </div>
+        <div class="card-body">
+            Change Location:
+        </div>
     </div>
-    <div>
-        Steam
+    <div class="card shadow m-3 rounded" style="background-color: #ffffff;">
+        <div class="card-header" style="background-color: #6200ee;color: #ffffff;">
+            Steam: How many players are playing <i class="font-weight-bold"><%= widget.steam.data.id %></i> ?
+            <div class="checkbox checkbox-slider--b-flat">
+                <label>
+                    <input type="checkbox"><span></span>
+                </label>
+            </div>
+        </div>
+        <div class="card-body">
+        </div>
     </div>
+</div>
+
 </body>
 </html>
