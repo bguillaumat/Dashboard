@@ -6,8 +6,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Dashboard</title>
     </head>
-    <body style="background-color: #00796b">
-        <nav class="navbar sticky-top navbar-light shadow" style="background-color: #004c40;">
+    <body style="background-color: #ffffff">
+        <nav class="navbar sticky-top navbar-light shadow" style="background-color: #3700B3;">
             <form method="post" action="/signout/" name="signoutForm">
                 <a class="navbar-brand" style="color: #ffffff" href="#" onclick="document.signoutForm.submit()">Logout</a>
             </form>
@@ -21,8 +21,8 @@
         </nav>
         <div class="card-group">
             <%if (widget.meteo.state == true) { %>
-                <div class="card shadow m-3 rounded" style="background-color: #48a999;">
-                    <div class="card-header">
+                <div class="card shadow m-3 rounded" style="background-color: #ffffff;">
+                    <div class="card-header" style="background-color: #6200ee;color: #ffffff;">
                         Weather: What is the weather like in <i class="font-weight-bold"><%= widget.meteo.data.city %></i>, today ?
                     </div>
                     <div class="card-body">
@@ -36,13 +36,12 @@
                 </div>
             <% } %>
             <%if (widget.steam.state == true && widget.steam.data.players != '') { %>
-                <div class="card shadow m-3 rounded" style="background-color: #48a999;">
-                    <div class="card-header">
-                        Steam: How many players are playing <i class="font-weight-bold"><%= widget.steam.data.id %></i> ?
+                <div class="card shadow m-3 rounded" style="background-color: #ffffff;">
+                    <div class="card-header" style="background-color: #6200ee;color: #ffffff;">
+                        Steam: How many players are playing <i class="font-weight-bold"><%= widget.steam.data.name %></i> ?
                     </div>
                     <div class="card-body">
-                        <%= widget.steam.data.id %>
-                        <%= widget.steam.data.players + ' players currently playing'%>
+                        <%= widget.steam.data.players + ' players are currently playing in ' + widget.steam.data.name %>
                     </div>
                 </div>
             <% } %>
