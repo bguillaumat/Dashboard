@@ -5,11 +5,13 @@ exports.steamName = function(id, callback) {
 
     request(url, function(err, response, body){
         try{
-            let result = JSON.parse(body);
-            if (result == null)
-                callback(null, null);
-            else
-                callback(null, Object.values(result)[0].data.name);
+            if (body) {
+                let result = JSON.parse(body);
+                if (result == null)
+                    callback(null, null);
+                else
+                    callback(null, Object.values(result)[0].data.name);
+            }
         }catch(e){
             callback(e);
         }
@@ -33,10 +35,12 @@ exports.steam = function(id, name, callback){
 
     request(url, function(err, response, body){
         try{
-            let result = JSON.parse(body);
-            if (name == null)
-                callback(null, null);
-            callback(null, result.response.player_count);
+            if (body) {
+                let result = JSON.parse(body);
+                if (name == null)
+                    callback(null, null);
+                callback(null, result.response.player_count);
+            }
         }catch(e){
             callback(e);
         }

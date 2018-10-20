@@ -41,7 +41,7 @@
             </div>
             <div class="form-group">
                 <label for="id">Timer:</label>
-                <input class="form-control" type="number" min="5" name="id" id="id" autofocus/>
+                <input class="form-control" type="number" min="5" name="mTimer" id="mTimer" autofocus/>
                 <small id="emailHelp" class="form-text text-muted">Number of seconds between each widget refresh.</small>
             </div>
         </div>
@@ -69,7 +69,7 @@
             </div>
             <div class="form-group">
                 <label for="id">Timer:</label>
-                <input class="form-control" type="number" name="id" id="id" min="5" autofocus/>
+                <input class="form-control" type="number" name="sTimer" id="sTimer" min="5" autofocus/>
                 <small id="emailHelp" class="form-text text-muted">Number of seconds between each widget refresh.</small>
             </div>
         </div>
@@ -80,25 +80,25 @@
     </div>
 
     <div class="card shadow rounded" style="background-color: #ffffff;">
-        <form method="post" action="">
+        <form method="post" action="/updateViews/">
             <div class="card-header" style="background-color: #6200ee;color: #ffffff;">
                 <img src="https://www.freeiconspng.com/uploads/youtube-logo-icon-symbol-18.png" width="30" height="30">
                 Number of views for <%= widget.ytViews.data.name %>
                 <div class="checkbox checkbox-slider--b-flat">
                     <label>
-                        <input style="-webkit-appearance: none" type="checkbox" id="sState" name="sState" <%= widget.ytViews.state ? 'checked' : '' %>><span></span>
+                        <input style="-webkit-appearance: none" type="checkbox" id="vState" name="vState" <%= widget.ytViews.state ? 'checked' : '' %>><span></span>
                     </label>
                 </div>
             </div>
             <div class="card-body">
                 <div class="form-group">
                     <label for="id">Change Video:</label>
-                    <input class="form-control" type="text" name="id" id="id" autofocus/>
+                    <input class="form-control" type="text" name="vid" id="vid" autofocus/>
                     <small id="emailHelp" class="form-text text-muted">Only provide the id of the video.</small>
                 </div>
                 <div class="form-group">
                     <label for="id">Timer:</label>
-                    <input class="form-control" type="number" name="id" id="id" min="5" autofocus/>
+                    <input class="form-control" type="number" name="vTimer" id="vTimer" min="5" autofocus/>
                     <small id="emailHelp" class="form-text text-muted">Number of seconds between each widget refresh.</small>
                 </div>
             </div>
@@ -109,25 +109,25 @@
     </div>
 
     <div class="card shadow rounded" style="background-color: #ffffff;">
-        <form method="post" action="">
+        <form method="post" action="/updateSub/">
             <div class="card-header" style="background-color: #6200ee;color: #ffffff;">
                 <img src="https://www.freeiconspng.com/uploads/youtube-logo-icon-symbol-18.png" width="30" height="30">
                 Number of subscribers for <%= widget.ytSub.data.name %>
                 <div class="checkbox checkbox-slider--b-flat">
                     <label>
-                        <input style="-webkit-appearance: none" type="checkbox" id="sState" name="sState" <%= widget.ytSub.state ? 'checked' : '' %>><span></span>
+                        <input style="-webkit-appearance: none" type="checkbox" id="subState" name="subState" <%= widget.ytSub.state ? 'checked' : '' %>><span></span>
                     </label>
                 </div>
             </div>
             <div class="card-body">
                 <div class="form-group">
                     <label for="id">Change channel:</label>
-                    <input class="form-control" type="text" name="id" id="id" autofocus/>
+                    <input class="form-control" type="text" name="subid" id="subid" autofocus/>
                     <small id="emailHelp" class="form-text text-muted">Only provide the id of the channel.</small>
                 </div>
                 <div class="form-group">
                     <label for="id">Timer:</label>
-                    <input class="form-control" type="number" name="id" id="id" min="5" autofocus/>
+                    <input class="form-control" type="number" name="subTimer" id="subTimer" min="5" autofocus/>
                     <small id="emailHelp" class="form-text text-muted">Number of seconds between each widget refresh.</small>
                 </div>
             </div>
@@ -138,30 +138,30 @@
     </div>
 
     <div class="card shadow rounded" style="background-color: #ffffff;">
-        <form method="post" action="">
+        <form method="post" action="/updateLast/">
             <div class="card-header" style="background-color: #6200ee;color: #ffffff;">
                 <img src="https://www.freeiconspng.com/uploads/youtube-logo-icon-symbol-18.png" width="30" height="30">
                 <%= widget.ytLast.data.nbr %> last comment for <%= widget.ytLast.data.name %>
                 <div class="checkbox checkbox-slider--b-flat">
                     <label>
-                        <input style="-webkit-appearance: none" type="checkbox" id="sState" name="sState" <%= widget.ytLast.state ? 'checked' : '' %>><span></span>
+                        <input style="-webkit-appearance: none" type="checkbox" id="lState" name="lState" <%= widget.ytLast.state ? 'checked' : '' %>><span></span>
                     </label>
                 </div>
             </div>
             <div class="card-body">
                 <div class="form-group">
                     <label for="id">Change video or number of comments:</label>
-                    <input class="form-control" type="text" name="id" id="id" autofocus/>
+                    <input class="form-control" type="text" name="lid" id="lid" autofocus/>
                     <small id="emailHelp" class="form-text text-muted">Only provide the id of the channel.</small>
                 </div>
                 <div class="form-group">
                     <label for="id">Number of last comments:</label>
-                    <input class="form-control" type="number" name="id" id="id" min="1" autofocus/>
+                    <input class="form-control" type="number" name="nbr" id="nbr" min="1" autofocus/>
                     <small id="emailHelp" class="form-text text-muted">Number of last comments.</small>
                 </div>
                 <div class="form-group">
                     <label for="id">Timer:</label>
-                    <input class="form-control" type="number" name="id" id="id" min="5" autofocus/>
+                    <input class="form-control" type="number" name="lTimer" id="lTimer" min="5" autofocus/>
                     <small id="emailHelp" class="form-text text-muted">Number of seconds between each widget refresh.</small>
                 </div>
             </div>
