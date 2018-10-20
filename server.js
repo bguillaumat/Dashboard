@@ -6,6 +6,10 @@ let bodyParser = require('body-parser');
 let urlencodedParser = bodyParser.urlencoded({ extended: false });
 let store = require('store');
 let firebase = require("firebase");
+let steam = require("./scripts/steam");
+let weather = require("./scripts/weather");
+
+//https://store.steampowered.com/api/appdetails?appids=57690
 
 let config = {
     apiKey: "AIzaSyBFkGiSYcEVGWoeKFfdOz6lvZ4sdYkOhC4",
@@ -20,79 +24,19 @@ firebase.initializeApp(config);
 let db = firebase.firestore();
 let err = {code: false, msg: ""};
 let widget = {meteo: {state: false, data: {city: 'Paris', temp: '', state: '', icon: ''}},
-    steam: {state: false, data: {players: '', id: '578080'}}};
-
-let steam = function(id, callback){
-    let  url = 'http://api.steampowered.com/ISteamUserStats/GetNumberOfCurrentPlayers/v0001/?appid='+id+'&key=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX';
-
-    request(url, function(err, response, body){
-        try{
-            let result = JSON.parse(body);
-            if (result.response.player_count === "42" || result.response.player_count === "12313450")
-                return null;
-            callback(null, result.response.player_count);
-        }catch(e){
-            callback(e);
-        }
-    });
-};
-
-function askSteam(id) {
-    return new Promise(resolve =>
-        steam(id, function(err, playersNbr){
-            if(err) return console.log("This error: ",err);
-            if (playersNbr != null) {
-                widget.steam.data.players = playersNbr;
-            }
-            resolve(true);
-        })
-    )
-}
-
-let openweathermeteo = function(city, callback){
-    let  url = 'http://api.openweathermap.org/data/2.5/weather?q='+city+'&units=metric&appid=521c8f8246c012c8421856de66e06c2a';
-
-    request(url, function(err, response, body){
-        try{
-            let result = JSON.parse(body);
-            if (result.cod === "404")
-                return null;
-            let previsions = {
-                temperature : result.main.temp,
-                icon: result.weather[0].icon,
-                //city : result.name,
-                state : result.weather[0].main
-            };
-
-            callback(null, previsions);
-        }catch(e){
-            callback(e);
-        }
-    });
-};
-
-function askMeteo(city) {
-    return new Promise(resolve =>
-        openweathermeteo(city, function(err, previsions){
-            if(err) return console.log("This error: ",err);
-            if (previsions.temperature != null) {
-                //widget.meteo.data.city = previsions.city;
-                widget.meteo.data.icon = previsions.icon;
-                widget.meteo.data.temp = previsions.temperature;
-                widget.meteo.data.state = previsions.state;
-            }
-            resolve(true);
-        })
-    )
-}
+    steam: {state: false, data: {players: '', id: '578080', name: ''}}};
 
 function wichWidget() {
     return new Promise(async resolve => {
         if (widget.meteo.state) {
-            await askMeteo(widget.meteo.data.city);
+            let prevision = await weather.askMeteo(widget.meteo.data.city);
+            widget.meteo.data.icon = prevision.icon;
+            widget.meteo.data.temp = prevision.temperature;
+            widget.meteo.data.state = prevision.state;
         }
         if (widget.steam.state) {
-            await askSteam(widget.steam.data.id);
+            widget.steam.data.players = await steam.askSteam(widget.steam.data.id);
+            widget.steam.data.name = await steam.askSteamName(widget.steam.data.id);
         }
         resolve(true);
     });
