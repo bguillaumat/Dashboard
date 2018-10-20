@@ -21,9 +21,9 @@ let db = firebase.firestore();
 let err = {code: false, msg: ""};
 let widget = {meteo: {state: false, data: {city: 'Paris', temp: '', state: '', icon: ''}},
     steam: {state: false, data: {players: '', id: '578080', name: ''}},
-    ytSub: {state: false, data: {id: 'UCUaHJ0fTA-1theR8A8Polmw', name: '', subs: ''}},
-    ytViews: {state: false, data: {id: 'KcgGS3EvKYA', name: '', views: ''}},
-    ytLast: {state: false, data: {id: 'KcgGS3EvKYA', nbr: 5, name: '', comments: []}}};
+    ytSub: {state: true, data: {id: 'UCUaHJ0fTA-1theR8A8Polmw', name: '', subs: ''}},
+    ytViews: {state: true, data: {id: 'KcgGS3EvKYA', name: '', views: ''}},
+    ytLast: {state: true, data: {id: 'KcgGS3EvKYA', nbr: 5, name: '', comments: []}}};
 
 
 function wichWidget() {
