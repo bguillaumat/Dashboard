@@ -5,8 +5,6 @@ let bodyParser = require('body-parser');
 let urlencodedParser = bodyParser.urlencoded({ extended: false });
 let store = require('store');
 let firebase = require('firebase');
-let steam = require('./scripts/steam');
-let yt = require('./scripts/youtube');
 let widgets = require('./scripts/widgets');
 let config = {
     apiKey: "AIzaSyBFkGiSYcEVGWoeKFfdOz6lvZ4sdYkOhC4",
@@ -19,11 +17,11 @@ let config = {
 firebase.initializeApp(config);
 let db = firebase.firestore();
 let err = {code: false, msg: ""};
-let widget = {meteo: {state: false, data: {city: 'Paris', temp: '', state: '', icon: ''}, timer: 60},
-    steam: {state: false, data: {players: '', id: '578080', name: ''}, timer: 60},
-    ytSub: {state: true, data: {id: 'UCUaHJ0fTA-1theR8A8Polmw', name: '', subs: ''}, timer: 60},
-    ytViews: {state: true, data: {id: 'KcgGS3EvKYA', name: '', views: ''}, timer: 60},
-    ytLast: {state: true, data: {id: 'KcgGS3EvKYA', nbr: 5, name: '', comments: []}, timer: 60}};
+let widget = {meteo: {state: false, data: {city: 'Paris', temp: '', state: '', icon: ''}, timer: 6},
+    steam: {state: false, data: {players: '', id: '578080', name: ''}, timer: 6},
+    ytSub: {state: false, data: {id: 'UCUaHJ0fTA-1theR8A8Polmw', name: '', subs: ''}, timer: 6},
+    ytViews: {state: false, data: {id: 'KcgGS3EvKYA', name: '', views: ''}, timer: 6},
+    ytLast: {state: false, data: {id: 'KcgGS3EvKYA', nbr: 5, name: '', comments: []}, timer: 6}};
 
 function wichWidget() {
     return new Promise(async resolve => {
@@ -31,34 +29,31 @@ function wichWidget() {
             await widgets.meteo(widget);
             setInterval(async function () {
                 await widgets.meteo(widget);
-            }, widget.meteo.timer * 100);
+            }, widget.meteo.timer * 1000);
         }
         if (widget.steam.state) {
-            widget.steam.data.name = await steam.askSteamName(widget.steam.data.id);
-            widget.steam.data.players = await steam.askSteam(widget.steam.data.id, widget.steam.data.name);
+            await widgets.steam(widget);
+            setInterval(async function () {
+                await widgets.steam(widget);
+            }, widget.steam.timer * 1000);
         }
         if (widget.ytSub) {
-            let data = await yt.askChannel(widget.ytSub.data.id);
-            if (data) {
-                widget.ytSub.data.name = data.name;
-                widget.ytSub.data.subs = data.subs.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
-            }
-            else
-                widget.ytSub.data.subs = null;
+            await widgets.ytSubs(widget);
+            setInterval(async function () {
+                await widgets.ytSubs(widget);
+            }, widget.ytSub.timer * 1000);
         }
         if (widget.ytViews) {
-            let data = await yt.askViews(widget.ytViews.data.id);
-            if (data) {
-                widget.ytViews.data.name = data.name;
-                widget.ytViews.data.views = data.views.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
-            }
-            else
-                widget.ytViews.data.views = null;
+            await widgets.ytViews(widget);
+            setInterval(async function () {
+                await widgets.ytViews(widget);
+            }, widget.ytViews.timer * 1000);
         }
         if (widget.ytLast) {
-            let data = await yt.askViews(widget.ytLast.data.id);
-            widget.ytLast.data.comments = await yt.askComments(widget.ytLast.data.id, widget.ytLast.data.nbr);
-            widget.ytLast.data.name = data.name;
+            await widgets.ytLast(widget);
+            setInterval(async function () {
+                await widgets.ytLast(widget);
+            }, widget.ytLast.timer * 1000);
         }
         resolve(true);
     });
@@ -99,6 +94,9 @@ app.use(session({secret: 'dashboard'}))
                     } else {
                         widget.meteo.state = doc.data().meteo;
                         widget.steam.state = doc.data().steam;
+                        widget.ytSub.state = doc.data().ytSub;
+                        widget.ytViews.state = doc.data().ytViews;
+                        widget.ytLast.state = doc.data().ytLast;
                         res.redirect('/main');
                     }
                 })
@@ -121,6 +119,9 @@ app.use(session({secret: 'dashboard'}))
             db.collection("Users").doc(store.get('user').data.user.uid).set({
                 meteo: false,
                 steam: false,
+                ytSub: false,
+                ytLast: false,
+                ytViews: false
             })
                 .then(function() {
                     res.redirect('/permissions');
