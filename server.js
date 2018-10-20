@@ -19,7 +19,7 @@ firebase.initializeApp(config);
 
 let db = firebase.firestore();
 let err = {code: false, msg: ""};
-let widget = {meteo: {state: false, data: {city: 'Paris', temp: '', state: ''}},
+let widget = {meteo: {state: false, data: {city: 'Paris', temp: '', state: '', icon: ''}},
     steam: {state: false, data: {players: '', id: '578080'}}};
 
 let steam = function(id, callback){
@@ -59,6 +59,7 @@ let openweathermeteo = function(city, callback){
                 return null;
             let previsions = {
                 temperature : result.main.temp,
+                icon: result.weather[0].icon,
                 //city : result.name,
                 state : result.weather[0].main
             };
@@ -76,6 +77,7 @@ function askMeteo(city) {
             if(err) return console.log("This error: ",err);
             if (previsions.temperature != null) {
                 //widget.meteo.data.city = previsions.city;
+                widget.meteo.data.icon = previsions.icon;
                 widget.meteo.data.temp = previsions.temperature;
                 widget.meteo.data.state = previsions.state;
             }
