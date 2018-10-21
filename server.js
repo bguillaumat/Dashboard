@@ -263,7 +263,7 @@ app.use(session({secret: 'dashboard'}))
     })
     
     .post('/updateMeteo/', urlencodedParser, function (req, res) {
-        let index = req.body.nbr;
+        let index = req.body.nbrid;
         db.collection("Users").doc(store.get('user').data.user.uid).update({
             meteo: firebase.firestore.FieldValue.arrayRemove({state: allWidgets.meteo[index].state, city: allWidgets.meteo[index].data.city, timer: allWidgets.meteo[index].timer})
         }).then(function () {
@@ -290,7 +290,7 @@ app.use(session({secret: 'dashboard'}))
     })
 
     .post('/updateSteam/', urlencodedParser, async function (req, res) {
-        let index = req.body.nbr;
+        let index = req.body.nbrid;
         db.collection("Users").doc(store.get('user').data.user.uid).update({
             steam: firebase.firestore.FieldValue.arrayRemove({id: allWidgets.steam[index].data.id, state: allWidgets.steam[index].state, timer: allWidgets.steam[index].timer})
         }).then(function() {
@@ -316,7 +316,7 @@ app.use(session({secret: 'dashboard'}))
     })
 
     .post('/updateSub/', urlencodedParser, async function (req, res) {
-        let index = req.body.nbr;
+        let index = req.body.nbrid;
         db.collection("Users").doc(store.get('user').data.user.uid).update({
             ytSub: firebase.firestore.FieldValue.arrayRemove({id: allWidgets.ytSub[index].data.id, state: allWidgets.ytSub[index].state, timer: allWidgets.ytSub[index].timer})
         }).then(function() {
@@ -342,7 +342,7 @@ app.use(session({secret: 'dashboard'}))
     })
 
     .post('/updateViews/', urlencodedParser, async function (req, res) {
-        let index = req.body.nbr;
+        let index = req.body.nbrid;
         db.collection("Users").doc(store.get('user').data.user.uid).update({
             ytViews: firebase.firestore.FieldValue.arrayRemove({id: allWidgets.ytViews[index].data.id, state: allWidgets.ytViews[index].state, timer: allWidgets.ytViews[index].timer})
         }).then(function() {
@@ -368,7 +368,7 @@ app.use(session({secret: 'dashboard'}))
     })
 
     .post('/updateLast/', urlencodedParser, async function (req, res) {
-        let index = 0;
+        let index = req.body.nbrid;
         db.collection("Users").doc(store.get('user').data.user.uid).update({
             ytLast: firebase.firestore.FieldValue.arrayRemove({id: allWidgets.ytLast[index].data.id, state: allWidgets.ytLast[index].state, nbr: allWidgets.ytLast[index].data.nbr, timer: allWidgets.ytLast[index].timer})
         }).then(function() {
@@ -396,7 +396,7 @@ app.use(session({secret: 'dashboard'}))
     })
 
     .post('/updateReddit/', urlencodedParser, async function (req, res) {
-        let index = req.body.nbr;
+        let index = req.body.nbrid;
         db.collection("Users").doc(store.get('user').data.user.uid).update({
             reddit: firebase.firestore.FieldValue.arrayRemove({state: allWidgets.reddit[index].state, nbr: allWidgets.reddit[index].data.nbr, sub: allWidgets.reddit[index].data.sub, timer: allWidgets.reddit[index].timer})
         }).then(function() {
