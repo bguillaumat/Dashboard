@@ -33,13 +33,13 @@ function wichWidget() {
             await widgets.meteo(widget);
             setInterval(async function () {
                 await widgets.meteo(widget);
-            }, widget.meteo.timer * 1000);
+            }, widget.meteo.timer * 1000 * 60);
         }
         if (widget.steam.state && widget.steam.data.id !== '') {
             await widgets.steam(widget);
             setInterval(async function () {
                 await widgets.steam(widget);
-            }, widget.steam.timer * 1000);
+            }, widget.steam.timer * 1000 * 60);
         }
         if (widget.ytSub && widget.ytSub.data.id !== '') {
             await widgets.ytSubs(widget);
@@ -63,7 +63,7 @@ function wichWidget() {
             await widgets.reddit(widget);
             setInterval(async function () {
                 await widgets.reddit(widget);
-            }, widget.reddit.timer * 1000);
+            }, widget.reddit.timer * 1000 * 60);
         }
         resolve(true);
     });
