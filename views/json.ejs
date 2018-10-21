@@ -1,1 +1,75 @@
-JSON
+{
+    "client": {
+        "host": "<%= clientIp %>"
+    },
+    "server": {
+        "current_time": <%= epochTime %>,
+        "services": [{
+            "name": "weather",
+            "widget": [{
+                "name": "city_temperature",
+                "description": "Display temperature for city",
+                "params": [{
+                    "name": "city",
+                    "type": "string"
+                }]
+            }]
+        }, {
+            "name": "steam",
+            "widget": [{
+                "name": "number_of_players",
+                "description": "Display number of player for the game",
+                "params": [{
+                    "name": "id",
+                    "type": "string"
+                }]
+            }]
+        }, {
+            "name": "youtube_views",
+            "widget": [{
+                "name": "youtube_views",
+                "description": "Display number of views for a video",
+                "params": [{
+                    "name": "id",
+                    "type": "string"
+                }]
+            }]
+        }, {
+            "name": "youtube_number_subscribers",
+            "widget": [{
+                "name": "youtube_number_subscribers",
+                "description": "Display number of subscribers for a channel",
+                "params": [{
+                    "name": "id",
+                    "type": "string"
+                }]
+            }]
+        }, {
+            "name": "youtube_last_comments",
+            "widget": [{
+                "name": "youtube_last_comments",
+                "description": "Display x last comments for a video",
+                "params": [{
+                    "name": "id",
+                    "type": "string"
+                }, {
+                    "name": "number",
+                    "type": "integer"
+                }]
+            }]
+        }, {
+            "name": "reddit_last_posts",
+            "widget": [{
+                "name": "reddit_last_posts",
+                "description": "Display x last posts for a subreddit",
+                "params": [{
+                    "name": "sub",
+                    "type": "string"
+                }, {
+                    "name": "number",
+                    "type": "integer"
+                }]
+            }]
+        }]
+    }
+}

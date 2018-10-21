@@ -1,3 +1,4 @@
+const requestIp = require('request-ip');
 let express = require('express');
 let app = express();
 let session = require('cookie-session');
@@ -87,10 +88,9 @@ app.use(session({secret: 'dashboard'}))
     })
 
     .get('/about.json', function (req, res) {
-        if (store.get('user') != null)
-            res.render('json.ejs');
-        else
-            res.render('log.ejs', {err});
+        let clientIp = requestIp.getClientIp(req);
+        let epochTime = (new Date).getTime();
+        res.render('json.ejs', {clientIp: clientIp, epochTime: epochTime});
     })
 
     .get('/permissions', function (req, res) {
@@ -233,7 +233,6 @@ app.use(session({secret: 'dashboard'}))
         widget.steam.state = req.body.sState === "on";
         if (req.body.sTimer > 5)
             widget.steam.timer = req.body.sTimer;
-        console.log(widget.steam.timer);
         if (req.body.id !== '') {
             widget.steam.data.id = req.body.id;
             widget.steam.data.name = await steam.askSteamName(widget.steam.data.id);
