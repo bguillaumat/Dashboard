@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="refresh" content="60; url=#">
+    <%- include partials/header.ejs %>
+    <title>Dashboard</title>
+</head>
+<nav class="navbar sticky-top navbar-light shadow" style="background-color: #3700B3;">
+    <form method="post" action="/signout/" name="signoutForm">
+        <a class="navbar-brand" style="color: #ffffff" href="#" onclick="document.signoutForm.submit()">Logout</a>
+    </form>
+    <form method="post" action="/main/" name="mainForm">
+        <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+            <li class="nav-item">
+                <a class="nav-link" href="#"><i class="fa fa-backward" style="color: #ffffff" onclick="document.mainForm.submit()"></i></a>
+            </li>
+        </ul>
+    </form>
+</nav>
+<body style="background-color: #ffffff">
+<div class="card-columns m-3">
+    <div class="card shadow rounded" style="background-color: #ffffff;">
+        <form method="post" action="/addYoutubeLast/">
+            <div class="card-header" style="background-color: #6200ee;color: #ffffff;">
+                <img src="/youtube-icon.png" width="30" height="30">
+            </div>
+            <div class="card-body">
+                <div class="form-group">
+                    <label for="id">Change video or number of comments:</label>
+                    <input class="form-control" type="text" name="lid" id="lid" value="Nx4E1htWw8Y" autofocus/>
+                    <small id="emailHelp" class="form-text text-muted">Only provide the id of the channel.</small>
+                </div>
+                <div class="form-group">
+                    <label for="id">Number of last comments:</label>
+                    <input class="form-control" type="number" name="nbr" id="nbr" min="1" max="20" value="5" autofocus/>
+                    <small id="emailHelp" class="form-text text-muted">Number of last comments.</small>
+                </div>
+                <div class="form-group">
+                    <label for="id">Timer:</label>
+                    <input class="form-control" type="number" name="lTimer" id="lTimer" min="5" value="5" autofocus/>
+                    <small id="emailHelp" class="form-text text-muted">Number of seconds between each widget refresh.</small>
+                </div>
+            </div>
+            <div class="card-footer text-right">
+                <input class="btn btn-link" type="submit" value="Save"/>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>

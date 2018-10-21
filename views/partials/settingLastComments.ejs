@@ -1,5 +1,5 @@
 <div class="card shadow rounded" style="background-color: #ffffff;">
-    <form method="post" action="/updateLast/">
+    <form method="post" action="/updateLast/<%= id %>">
         <div class="card-header" style="background-color: #6200ee;color: #ffffff;">
             <img src="/youtube-icon.png" width="30" height="30">
             <%= settings.data.nbr %> last comment for <%= settings.data.name %>
@@ -12,21 +12,22 @@
         <div class="card-body">
             <div class="form-group">
                 <label for="id">Change video or number of comments:</label>
-                <input class="form-control" type="text" name="lid" id="lid" autofocus/>
+                <input class="form-control" type="text" name="lid" id="lid" value="<%= settings.data.id %>" autofocus/>
                 <small id="emailHelp" class="form-text text-muted">Only provide the id of the channel.</small>
             </div>
             <div class="form-group">
                 <label for="id">Number of last comments:</label>
-                <input class="form-control" type="number" name="nbr" id="nbr" min="1" max="20" autofocus/>
+                <input class="form-control" type="number" name="nbr" id="nbr" min="1" max="20" value="<%= settings.data.nbr %>" autofocus/>
                 <small id="emailHelp" class="form-text text-muted">Number of last comments.</small>
             </div>
             <div class="form-group">
                 <label for="id">Timer:</label>
-                <input class="form-control" type="number" name="lTimer" id="lTimer" min="5" autofocus/>
+                <input class="form-control" type="number" name="lTimer" id="lTimer" min="5" value="<%= settings.timer %>" autofocus/>
                 <small id="emailHelp" class="form-text text-muted">Number of seconds between each widget refresh.</small>
             </div>
         </div>
         <div class="card-footer text-right">
+            <a href="/deleteLast/<%= id %>" class="btn btn-danger">Delete</a>
             <input class="btn btn-link" type="submit" value="Save"/>
         </div>
     </form>

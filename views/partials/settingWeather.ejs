@@ -1,5 +1,5 @@
     <div class="card shadow rounded" style="background-color: #ffffff;">
-        <form method="post" action="/updateMeteo/">
+        <form method="post" action="/updateMeteo/<%= id %>">
             <div class="card-header" style="background-color: #6200ee;color: #ffffff;">
                 <img src="/weather-icon.png" width="30" height="30">
                 What is the weather like in <i class="font-weight-bold"><%= settings.data.city %></i>, today ?
@@ -12,16 +12,17 @@
             <div class="card-body">
                 <div class="form-group">
                     <label for="location">Change Location:</label>
-                    <input class="form-control" type="text" name="location" id="location" autofocus/>
+                    <input class="form-control" type="text" name="location" id="location" value="<%= settings.data.city %>" autofocus/>
                     <small id="emailHelp" class="form-text text-muted">Only provide the id of the game.</small>
                 </div>
                 <div class="form-group">
                     <label for="id">Timer:</label>
-                    <input class="form-control" type="number" min="5" name="mTimer" id="mTimer" autofocus/>
+                    <input class="form-control" type="number" min="5" name="mTimer" id="mTimer" value="<%= settings.timer %>" autofocus/>
                     <small id="emailHelp" class="form-text text-muted">Number of seconds between each widget refresh.</small>
                 </div>
             </div>
             <div class="card-footer text-right">
+                <a href="/deleteWeather/<%= id %>" class="btn btn-danger">Delete</a>
                 <input class="btn btn-link" type="submit" value="Save"/>
             </div>
         </form>

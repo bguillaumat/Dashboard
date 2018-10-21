@@ -1,5 +1,5 @@
 <div class="card shadow rounded" style="background-color: #ffffff;">
-    <form method="post" action="/updateViews/">
+    <form method="post" action="/updateViews/<%= id %>">
         <div class="card-header" style="background-color: #6200ee;color: #ffffff;">
             <img src="/youtube-icon.png" width="30" height="30">
             Number of views for <%= settings.data.name %>
@@ -12,16 +12,17 @@
         <div class="card-body">
             <div class="form-group">
                 <label for="id">Change Video:</label>
-                <input class="form-control" type="text" name="vid" id="vid" autofocus/>
+                <input class="form-control" type="text" name="vid" id="vid" value="<%= settings.data.id %>" autofocus/>
                 <small id="emailHelp" class="form-text text-muted">Only provide the id of the video.</small>
             </div>
             <div class="form-group">
                 <label for="id">Timer:</label>
-                <input class="form-control" type="number" name="vTimer" id="vTimer" min="5" autofocus/>
+                <input class="form-control" type="number" name="vTimer" id="vTimer" min="5" value="<%= settings.timer %>" autofocus/>
                 <small id="emailHelp" class="form-text text-muted">Number of seconds between each widget refresh.</small>
             </div>
         </div>
         <div class="card-footer text-right">
+            <a href="/deleteViews/<%= id %>" class="btn btn-danger">Delete</a>
             <input class="btn btn-link" type="submit" value="Save"/>
         </div>
     </form>

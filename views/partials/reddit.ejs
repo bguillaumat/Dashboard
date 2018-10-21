@@ -4,7 +4,7 @@
         <i class="font-weight-bold"><%= reddit.data.nbr %></i> last posts for <i class="font-weight-bold"><%= reddit.data.sub %></i> subreddit.
     </div>
     <div class="card-body">
-        <% for (let i = 0; i < widget.reddit.data.posts.length; i++) { %>
+        <% for (let i = 0; i < reddit.data.posts.length; i++) { %>
             <a href="<%= reddit.data.posts[i].link %>">#<%= i + 1 %> - <%= reddit.data.posts[i].title %> by <%= reddit.data.posts[i].author %></a><br>
         <% } %>
     </div>
