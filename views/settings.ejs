@@ -17,11 +17,24 @@
         </ul>
     </form>
 </nav>
-<%- include("partials/settingWeather.ejs", {settings: widget.meteo}) %>
-<%- include("partials/settingSteam.ejs", {settings: widget.steam}) %>
-<%- include("partials/settingViews.ejs", {settings: widget.ytViews}) %>
-<%- include("partials/settingSubscribers.ejs", {settings: widget.ytSub}) %>
-<%- include("partials/settingLastComments.ejs", {settings: widget.ytLast}) %>
-<%- include("partials/settingReddit.ejs", {settings: widget.reddit}) %>
+<div class="text-center">
+    <h1>Add Widgets:</h1>
+    <div class="btn-group btn-group-lg" role="group">
+        <a href="#"><button type="button" class="btn btn-link"><img src="/weather-icon.png" width="30" height="30"></button></a>
+        <a href="#"><button type="button" class="btn btn-link"><img src="/youtube-icon.png" width="30" height="30"></button></a>
+        <a href="#"><button type="button" class="btn btn-link"><img src="/reddit-icon.png" width="30" height="30"></button></a>
+        <a href="#"><button type="button" class="btn btn-link"><img src="/steam-icon.png" width="30" height="30"></button></a>
+    </div>
+</div>
+<hr>
+<h1 class="text-center">Settings Your Widgets:</h1>
+<div class="card-columns m-3">
+    <%- include("partials/settingWeather.ejs", {settings: widget.meteo}) %>
+    <%- include("partials/settingSteam.ejs", {settings: widget.steam}) %>
+    <%- include("partials/settingViews.ejs", {settings: widget.ytViews}) %>
+    <%- include("partials/settingSubscribers.ejs", {settings: widget.ytSub}) %>
+    <%- include("partials/settingLastComments.ejs", {settings: widget.ytLast}) %>
+    <%- include("partials/settingReddit.ejs", {settings: widget.reddit}) %>
+</div>
 </body>
 </html>
