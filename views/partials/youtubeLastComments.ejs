@@ -9,7 +9,7 @@
         </div>
     </div>
     <div class="card-footer">
-        <% if (lastComments.data.comments !== null || typeof lastComments.data.comments !== 'undefined') { %>
+        <% if (lastComments.data.comments !== null) { %>
             <% for (let i = 0; i < lastComments.data.comments.length; i++) { %>
                 <div><%= lastComments.data.comments[i] %></div><br>
             <% } %>

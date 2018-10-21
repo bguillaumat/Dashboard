@@ -134,15 +134,15 @@ app.use(session({secret: 'dashboard'}))
                         }
                         for (let data of doc.data().steam)
                         {
-                            allWidgets.steam.push({state: data.state, data: {id: data.id, temp: '', state: '', icon: ''}, timer: data.timer});
+                            allWidgets.steam.push({state: data.state, data: {id: data.id, name: '', players: ''}, timer: data.timer});
                         }
                         for (let data of doc.data().ytSub)
                         {
-                            allWidgets.ytSub.push({state: data.state, data: {id: data.id, temp: '', state: '', icon: ''}, timer: data.timer});
+                            allWidgets.ytSub.push({state: data.state, data: {id: data.id, subs: '', name: ''}, timer: data.timer});
                         }
                         for (let data of doc.data().ytViews)
                         {
-                            allWidgets.ytViews.push({state: data.state, data: {id: data.id, temp: '', state: '', icon: ''}, timer: data.timer});
+                            allWidgets.ytViews.push({state: data.state, data: {id: data.id, views: '', name: ''}, timer: data.timer});
                         }
                         for (let data of doc.data().ytLast)
                         {

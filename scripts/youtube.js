@@ -7,7 +7,7 @@ exports.comments = function(id, nbr, callback) {
         try{
             if (body) {
                 let result = JSON.parse(body);
-                if (result.error)
+                if (result.error || result.code.toString() === "404")
                     callback(null, null);
                 else {
                     let comments = [];
@@ -28,7 +28,7 @@ exports.comments = function(id, nbr, callback) {
 exports.askComments = function(id, nbr) {
     return new Promise(resolve =>
         this.comments(id, nbr, function(err, data){
-            if(err) return console.log("This error: ",err);
+            if(err) resolve(null);
             if (data != null) {
                 resolve(data);
             }
@@ -79,18 +79,15 @@ exports.channel = function(id, callback){
         try{
             if (body) {
                 let result = JSON.parse(body);
-                if (id === '' || result.hasOwnProperty('error'))
-                    callback(null, null);
                 if (result.pageInfo.totalResults === 0)
                     callback(null, null);
-                if (typeof result.items !== "undefined" && result.items != null) {
+                else {
                     let data = {
                         name: result.items[0].snippet.title,
                         subs: result.items[0].statistics.subscriberCount
                     };
                     callback(null, data);
-                } else
-                    callback(null, null);
+                }
             }
         }catch(e){
             callback(e);
