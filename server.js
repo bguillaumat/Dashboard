@@ -200,7 +200,7 @@ app.use(session({secret: 'dashboard'}))
     
     .post('/updateMeteo/', urlencodedParser, function (req, res) {
         widget.meteo.state = req.body.mState === "on";
-        if (req.body.mTimer > 5)
+        if (req.body.mTimer >= 5)
             widget.meteo.timer = req.body.mTimer;
         if (req.body.location !== '') {
             widget.meteo.data.city = req.body.location;
@@ -218,9 +218,8 @@ app.use(session({secret: 'dashboard'}))
 
     .post('/updateSteam/', urlencodedParser, async function (req, res) {
         widget.steam.state = req.body.sState === "on";
-        if (req.body.sTimer > 5)
+        if (req.body.sTimer >= 5)
             widget.steam.timer = req.body.sTimer;
-        console.log(widget.steam.timer);
         if (req.body.id !== '') {
             widget.steam.data.id = req.body.id;
             widget.steam.data.name = await steam.askSteamName(widget.steam.data.id);
@@ -238,7 +237,7 @@ app.use(session({secret: 'dashboard'}))
 
     .post('/updateSub/', urlencodedParser, async function (req, res) {
         widget.ytSub.state = req.body.subState === "on";
-        if (req.body.subTimer > 5)
+        if (req.body.subTimer >= 5)
             widget.ytSub.timer = req.body.subTimer;
         if (req.body.subid !== '') {
             widget.ytSub.data.id = req.body.subid;
@@ -257,7 +256,7 @@ app.use(session({secret: 'dashboard'}))
 
     .post('/updateViews/', urlencodedParser, async function (req, res) {
         widget.ytViews.state = req.body.vState === "on";
-        if (req.body.vTimer > 5)
+        if (req.body.vTimer >= 5)
             widget.ytViews.timer = req.body.vTimer;
         if (req.body.vid !== '') {
             widget.ytViews.data.id = req.body.vid;
@@ -276,7 +275,7 @@ app.use(session({secret: 'dashboard'}))
 
     .post('/updateLast/', urlencodedParser, async function (req, res) {
         widget.ytLast.state = req.body.lState === "on";
-        if (req.body.lTimer > 5)
+        if (req.body.lTimer >= 5)
             widget.ytLast.timer = req.body.lTimer;
         if (req.body.nbr > 0)
             widget.ytLast.data.nbr = req.body.nbr;
