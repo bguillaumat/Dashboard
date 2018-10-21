@@ -8,7 +8,7 @@ let store = require('store');
 let firebase = require('firebase');
 let steam = require('./scripts/steam');
 let widgets = require('./scripts/widgets');
-let config = {
+const config = {
     apiKey: "AIzaSyBFkGiSYcEVGWoeKFfdOz6lvZ4sdYkOhC4",
     authDomain: "dashboard-epitech-7167a.firebaseapp.com",
     databaseURL: "https://dashboard-epitech-7167a.firebaseio.com",
@@ -26,6 +26,13 @@ let widget = {meteo: {state: false, data: {city: '', temp: '', state: '', icon: 
     ytLast: {state: false, data: {id: '', nbr: 5, name: '', comments: []}, timer: 6},
     reddit: {state: false, data: {sub: '', nbr: 5, posts: []}, timer: 6}
 };
+
+const styleDir = require('path').join(__dirname,'/style');
+app.use(express.static(styleDir));
+
+
+const assetsDir = require('path').join(__dirname,'/assets');
+app.use(express.static(assetsDir));
 
 function wichWidget() {
     return new Promise(async resolve => {
