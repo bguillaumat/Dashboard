@@ -6,6 +6,7 @@ exports.steamName = function(id, callback) {
     request(url, function(err, response, body){
         try{
             if (body) {
+                console.log(body);
                 let result = JSON.parse(body);
                 if (result == null)
                     callback(null, null);

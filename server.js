@@ -250,8 +250,7 @@ app.use(session({secret: 'dashboard'}))
 
     .post('/updateSub/', urlencodedParser, async function (req, res) {
         widget.ytSub.state = req.body.subState === "on";
-        if (req.body.subTimer > 5)
-            widget.ytSub.timer = req.body.subTimer;
+        widget.ytSub.timer = req.body.subTimer;
         if (req.body.subid !== '') {
             widget.ytSub.data.id = req.body.subid;
             widget.ytSub.data.name = '';
