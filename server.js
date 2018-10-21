@@ -26,7 +26,8 @@ let widget = {meteo: {state: false, data: {city: '', temp: '', state: '', icon: 
     ytLast: {state: false, data: {id: '', nbr: 5, name: '', comments: []}, timer: 5},
     reddit: {state: false, data: {sub: '', nbr: 5, posts: []}, timer: 5}
 };
-let allWidgets = {meteo: [],
+let allWidgets = {
+    meteo: [],
     steam: [],
     ytSub: [],
     ytViews: [],
@@ -107,7 +108,7 @@ app.use(session({secret: 'dashboard'}))
     .get('/main', async function (req, res) {
         if (store.get('user') != null) {
             await wichWidget();
-            res.render('main_view.ejs', {widget});
+            res.render('main_view.ejs', {widgets: allWidgets});
         }
         else
             res.redirect('/login');
@@ -127,6 +128,12 @@ app.use(session({secret: 'dashboard'}))
                     if (!doc.exists) {
                         res.redirect('/main');
                     } else {
+                        allWidgets.meteo.length = 0;
+                        allWidgets.ytLast.length = 0;
+                        allWidgets.ytSub.length = 0;
+                        allWidgets.ytViews.length = 0;
+                        allWidgets.steam.length = 0;
+                        allWidgets.reddit.length = 0;
                         for (let data of doc.data().meteo)
                         {
                             allWidgets.meteo.push({state: data.state, data: {city: data.city, temp: '', state: '', icon: ''}, timer: data.timer});
@@ -151,27 +158,6 @@ app.use(session({secret: 'dashboard'}))
                         {
                             allWidgets.reddit.push({state: data.state, data: {sub: data.sub, nbr: data.nbr, posts: []}, timer: data.timer});
                         }
-                        console.log(allWidgets);
-                        /*allWidgets.meteo.state = doc.data().meteo.state;
-                        allWidgets.meteo.data.city = doc.data().meteo.city;
-                        allWidgets.meteo.timer = doc.data().meteo.timer;
-                        allWidgets.steam.state = doc.data().steam.state;
-                        allWidgets.steam.data.id = doc.data().steam.id;
-                        allWidgets.steam.timer = doc.data().steam.timer;
-                        allWidgets.ytSub.state = doc.data().ytSub.state;
-                        allWidgets.ytSub.data.id = doc.data().ytSub.id;
-                        allWidgets.ytSub.timer = doc.data().ytSub.timer;
-                        allWidgets.ytViews.state = doc.data().ytViews.state;
-                        allWidgets.ytViews.data.id = doc.data().ytViews.id;
-                        allWidgets.ytViews.timer = doc.data().ytViews.timer;
-                        allWidgets.ytLast.state = doc.data().ytLast.state;
-                        allWidgets.ytLast.data.id = doc.data().ytLast.id;
-                        allWidgets.ytLast.data.nbr = doc.data().ytLast.nbr;
-                        allWidgets.ytLast.timer = doc.data().ytLast.timer;
-                        allWidgets.reddit.timer = doc.data().reddit.timer;
-                        allWidgets.reddit.state = doc.data().reddit.state;
-                        allWidgets.reddit.data.sub = doc.data().reddit.sub;
-                        allWidgets.reddit.data.nbr = doc.data().reddit.nbr;*/
                         res.redirect('/main');
                     }
                 })
@@ -184,20 +170,44 @@ app.use(session({secret: 'dashboard'}))
 
     .get('/settings', function (req, res) {
         if (store.get('user') != null)
-            res.render('settings.ejs', {widget});
+            res.render('settings.ejs', {widgets: allWidgets});
         else
             res.redirect('/login');
+    })
+
+    .get('/newWeather', function (req, res) {
+        res.render('newWeather.ejs');
+    })
+
+    .get('/newSteam', function (req, res) {
+        res.render('newSteam.ejs');
+    })
+
+    .get('/newReddit', function (req, res) {
+        res.render('newReddit.ejs');
+    })
+
+    .get('/newYoutubeSub', function (req, res) {
+        res.render('newYoutubeSub.ejs');
+    })
+
+    .get('/newYoutubeViews', function (req, res) {
+        res.render('newYoutubeViews.ejs');
+    })
+
+    .get('/newYoutubeLast', function (req, res) {
+        res.render('newYoutubeLast.ejs');
     })
 
     .get('/createuser', function (req, res) {
         if (store.get('user') != null)
             db.collection("Users").doc(store.get('user').data.user.uid).set({
-                meteo: [{state: false, city: '', timer: 5}],
-                steam: [{state: false, id: '', timer: 5}],
-                ytSub: [{state: false, id: '', timer: 5}],
-                ytViews: [{state: false, id: '', timer: 5}],
-                ytLast: [{state: false, id: '', nbr: 5, timer: 5}],
-                reddit: [{state: false, sub: '', nbr: 5, timer: 5}],
+                meteo: [],
+                steam: [],
+                ytSub: [],
+                ytViews: [],
+                ytLast: [],
+                reddit: [],
             })
                 .then(function() {
                     res.redirect('/permissions');
@@ -262,8 +272,8 @@ app.use(session({secret: 'dashboard'}))
         res.redirect('/main');
     })
     
-    .post('/updateMeteo/', urlencodedParser, function (req, res) {
-        let index = req.body.nbr;
+    .post('/updateMeteo/:id', urlencodedParser, function (req, res) {
+        let index = req.params.id;
         db.collection("Users").doc(store.get('user').data.user.uid).update({
             meteo: firebase.firestore.FieldValue.arrayRemove({state: allWidgets.meteo[index].state, city: allWidgets.meteo[index].data.city, timer: allWidgets.meteo[index].timer})
         }).then(function () {
@@ -289,8 +299,8 @@ app.use(session({secret: 'dashboard'}))
         res.redirect('/settings');
     })
 
-    .post('/updateSteam/', urlencodedParser, async function (req, res) {
-        let index = req.body.nbr;
+    .post('/updateSteam/:id', urlencodedParser, async function (req, res) {
+        let index = req.params.id;
         db.collection("Users").doc(store.get('user').data.user.uid).update({
             steam: firebase.firestore.FieldValue.arrayRemove({id: allWidgets.steam[index].data.id, state: allWidgets.steam[index].state, timer: allWidgets.steam[index].timer})
         }).then(function() {
@@ -315,8 +325,8 @@ app.use(session({secret: 'dashboard'}))
         res.redirect('/settings');
     })
 
-    .post('/updateSub/', urlencodedParser, async function (req, res) {
-        let index = req.body.nbr;
+    .post('/updateSub/:id', urlencodedParser, async function (req, res) {
+        let index = req.params.id;
         db.collection("Users").doc(store.get('user').data.user.uid).update({
             ytSub: firebase.firestore.FieldValue.arrayRemove({id: allWidgets.ytSub[index].data.id, state: allWidgets.ytSub[index].state, timer: allWidgets.ytSub[index].timer})
         }).then(function() {
@@ -341,8 +351,8 @@ app.use(session({secret: 'dashboard'}))
         res.redirect('/settings');
     })
 
-    .post('/updateViews/', urlencodedParser, async function (req, res) {
-        let index = req.body.nbr;
+    .post('/updateViews/:id', urlencodedParser, async function (req, res) {
+        let index = req.params.id;
         db.collection("Users").doc(store.get('user').data.user.uid).update({
             ytViews: firebase.firestore.FieldValue.arrayRemove({id: allWidgets.ytViews[index].data.id, state: allWidgets.ytViews[index].state, timer: allWidgets.ytViews[index].timer})
         }).then(function() {
@@ -367,8 +377,8 @@ app.use(session({secret: 'dashboard'}))
         res.redirect('/settings');
     })
 
-    .post('/updateLast/', urlencodedParser, async function (req, res) {
-        let index = 0;
+    .post('/updateLast/:id', urlencodedParser, async function (req, res) {
+        let index = req.params.id;
         db.collection("Users").doc(store.get('user').data.user.uid).update({
             ytLast: firebase.firestore.FieldValue.arrayRemove({id: allWidgets.ytLast[index].data.id, state: allWidgets.ytLast[index].state, nbr: allWidgets.ytLast[index].data.nbr, timer: allWidgets.ytLast[index].timer})
         }).then(function() {
@@ -395,8 +405,8 @@ app.use(session({secret: 'dashboard'}))
         res.redirect('/settings');
     })
 
-    .post('/updateReddit/', urlencodedParser, async function (req, res) {
-        let index = req.body.nbr;
+    .post('/updateReddit/:id', urlencodedParser, async function (req, res) {
+        let index = req.params.id;
         db.collection("Users").doc(store.get('user').data.user.uid).update({
             reddit: firebase.firestore.FieldValue.arrayRemove({state: allWidgets.reddit[index].state, nbr: allWidgets.reddit[index].data.nbr, sub: allWidgets.reddit[index].data.sub, timer: allWidgets.reddit[index].timer})
         }).then(function() {
@@ -421,6 +431,152 @@ app.use(session({secret: 'dashboard'}))
             allWidgets.reddit[index].data.sub = '';
         res.redirect('/settings');
     })
+
+    .post('/addReddit/', urlencodedParser, async function (req, res) {
+        let newReddit = {state: true, data: {sub: req.body.redditId, nbr: req.body.redditNbr}, timer: req.body.redditTimer};
+        if (newReddit.data.sub === null) {
+            newReddit.data.sub = '';
+        }
+        allWidgets.reddit.push(newReddit);
+        db.collection("Users").doc(store.get('user').data.user.uid).update({
+            reddit: firebase.firestore.FieldValue.arrayUnion({state: newReddit.state, nbr: newReddit.data.nbr, sub: newReddit.data.sub, timer: newReddit.timer})
+        }).then(function() {
+            res.redirect('/settings');
+        }).catch(function(error) {
+        });
+        res.redirect('/settings');
+    })
+    .post('/addSteam/', urlencodedParser, async function (req, res) {
+        let newSteam = {state: true, data: {id: req.body.id}, timer: req.body.sTimer};
+        allWidgets.steam.push(newSteam);
+        db.collection("Users").doc(store.get('user').data.user.uid).update({
+            steam: firebase.firestore.FieldValue.arrayUnion({state: newSteam.state, id: newSteam.data.id, timer: newSteam.timer})
+        }).then(function() {
+            res.redirect('/settings');
+        }).catch(function(error) {
+        });
+        res.redirect('/settings');
+    })
+    .post('/addWeather/', urlencodedParser, async function (req, res) {
+        let newWeather = {state: true, data: {city: req.body.location}, timer: req.body.mTimer};
+        allWidgets.meteo.push(newWeather);
+        db.collection("Users").doc(store.get('user').data.user.uid).update({
+            meteo: firebase.firestore.FieldValue.arrayUnion({state: newWeather.state, city: newWeather.data.city, timer: newWeather.timer})
+        }).then(function() {
+            res.redirect('/settings');
+        }).catch(function(error) {
+        });
+        res.redirect('/settings');
+    })
+
+    .post('/addYoutubeSub/', urlencodedParser, async function (req, res) {
+        let newSub = {state: true, data: {id: req.body.subid}, timer: req.body.subTimer};
+        allWidgets.ytSub.push(newSub);
+        db.collection("Users").doc(store.get('user').data.user.uid).update({
+            ytSub: firebase.firestore.FieldValue.arrayUnion({state: newSub.state, id: newSub.data.id, timer: newSub.timer})
+        }).then(function() {
+            res.redirect('/settings');
+        }).catch(function(error) {
+        });
+        res.redirect('/settings');
+    })
+
+    .post('/addYoutubeViews/', urlencodedParser, async function (req, res) {
+        let newViews = {state: true, data: {id: req.body.vid}, timer: req.body.vTimer};
+        allWidgets.ytViews.push(newViews);
+        db.collection("Users").doc(store.get('user').data.user.uid).update({
+            ytViews: firebase.firestore.FieldValue.arrayUnion({state: newViews.state, id: newViews.data.id, timer: newViews.timer})
+        }).then(function() {
+            res.redirect('/settings');
+        }).catch(function(error) {
+        });
+        res.redirect('/settings');
+    })
+
+    .post('/addYoutubeLast/', urlencodedParser, async function (req, res) {
+        let newLast = {state: true, data: {id: req.body.lid, nbr: req.body.nbr}, timer: req.body.lTimer};
+        allWidgets.ytLast.push(newLast);
+        db.collection("Users").doc(store.get('user').data.user.uid).update({
+            ytLast: firebase.firestore.FieldValue.arrayUnion({state: newLast.state, nbr: newLast.data.nbr, id: newLast.data.id, timer: newLast.timer})
+        }).then(function() {
+            res.redirect('/settings');
+        }).catch(function(error) {
+        });
+        res.redirect('/settings');
+    })
+
+    .get('/deleteReddit/:id', urlencodedParser, async function (req, res) {
+        let index = req.params.id;
+        db.collection("Users").doc(store.get('user').data.user.uid).update({
+            reddit: firebase.firestore.FieldValue.arrayRemove({state: allWidgets.reddit[index].state, nbr: allWidgets.reddit[index].data.nbr, sub: allWidgets.reddit[index].data.sub, timer: allWidgets.reddit[index].timer})
+        }).then(function() {
+            res.redirect('/settings');
+        }).catch(function(error) {
+        });
+        allWidgets.reddit.splice(index, 1);
+        res.redirect('/settings');
+    })
+
+    .get('/deleteSteam/:id', urlencodedParser, async function (req, res) {
+        let index = req.params.id;
+        db.collection("Users").doc(store.get('user').data.user.uid).update({
+            steam: firebase.firestore.FieldValue.arrayRemove({state: allWidgets.steam[index].state, id: allWidgets.steam[index].data.id, timer: allWidgets.steam[index].timer})
+        }).then(function() {
+            res.redirect('/settings');
+        }).catch(function(error) {
+        });
+        allWidgets.steam.splice(index, 1);
+        res.redirect('/settings');
+    })
+
+    .get('/deleteWeather/:id', urlencodedParser, async function (req, res) {
+        let index = req.params.id;
+        db.collection("Users").doc(store.get('user').data.user.uid).update({
+            meteo: firebase.firestore.FieldValue.arrayRemove({state: allWidgets.meteo[index].state, city: allWidgets.meteo[index].data.city, timer: allWidgets.meteo[index].timer})
+        }).then(function() {
+            res.redirect('/settings');
+        }).catch(function(error) {
+        });
+        allWidgets.meteo.splice(index, 1);
+        res.redirect('/settings');
+    })
+
+    .get('/deleteSubscriber/:id', urlencodedParser, async function (req, res) {
+        let index = req.params.id;
+        db.collection("Users").doc(store.get('user').data.user.uid).update({
+            ytSub: firebase.firestore.FieldValue.arrayRemove({state: allWidgets.ytSub[index].state, id: allWidgets.ytSub[index].data.id, timer: allWidgets.ytSub[index].timer})
+        }).then(function() {
+            res.redirect('/settings');
+        }).catch(function(error) {
+        });
+        allWidgets.ytSub.splice(index, 1);
+        res.redirect('/settings');
+    })
+
+    .get('/deleteViews/:id', urlencodedParser, async function (req, res) {
+        let index = req.params.id;
+        db.collection("Users").doc(store.get('user').data.user.uid).update({
+            ytViews: firebase.firestore.FieldValue.arrayRemove({state: allWidgets.ytViews[index].state, id: allWidgets.ytViews[index].data.id, timer: allWidgets.ytViews[index].timer})
+        }).then(function() {
+            res.redirect('/settings');
+        }).catch(function(error) {
+        });
+        allWidgets.ytViews.splice(index, 1);
+        res.redirect('/settings');
+    })
+
+    .get('/deleteLast/:id', urlencodedParser, async function (req, res) {
+        let index = req.params.id;
+        db.collection("Users").doc(store.get('user').data.user.uid).update({
+            ytLast: firebase.firestore.FieldValue.arrayRemove({state: allWidgets.ytLast[index].state, id: allWidgets.ytLast[index].data.id, nbr: allWidgets.ytLast[index].data.nbr, timer: allWidgets.ytLast[index].timer})
+        }).then(function() {
+            res.redirect('/settings');
+        }).catch(function(error) {
+        });
+        allWidgets.ytLast.splice(index, 1);
+        res.redirect('/settings');
+    })
+
 
     .use(function(req, res, next){
         res.redirect('/login');

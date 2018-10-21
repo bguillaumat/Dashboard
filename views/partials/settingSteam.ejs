@@ -1,5 +1,5 @@
 <div class="card shadow rounded" style="background-color: #ffffff;">
-    <form method="post" action="/updateSteam/">
+    <form method="post" action="/updateSteam/<%= id %>">
         <div class="card-header" style="background-color: #6200ee;color: #ffffff;">
             <img src="/steam-icon.png" width="30" height="30">
             How many players are playing at <i class="font-weight-bold"><%= settings.data.name %></i> ?
@@ -12,16 +12,17 @@
         <div class="card-body">
             <div class="form-group">
                 <label for="id">Change Game:</label>
-                <input class="form-control" type="number" name="id" id="id" autofocus/>
+                <input class="form-control" type="number" name="id" id="id" value="<%= settings.data.id %>" autofocus/>
                 <small id="emailHelp" class="form-text text-muted">Only provide the id of the game.</small>
             </div>
             <div class="form-group">
                 <label for="id">Timer:</label>
-                <input class="form-control" type="number" name="sTimer" id="sTimer" min="5" autofocus/>
+                <input class="form-control" type="number" name="sTimer" id="sTimer" min="5" value="<%= settings.timer %>" autofocus/>
                 <small id="emailHelp" class="form-text text-muted">Number of seconds between each widget refresh.</small>
             </div>
         </div>
         <div class="card-footer text-right">
+            <a href="/deleteSteam/<%= id %>" class="btn btn-danger">Delete</a>
             <input class="btn btn-link" type="submit" value="Save"/>
         </div>
     </form>

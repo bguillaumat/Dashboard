@@ -19,22 +19,34 @@
 </nav>
 <div class="text-center">
     <h1>Add Widgets:</h1>
-    <div class="btn-group btn-group-lg" role="group">
-        <a href="#"><button type="button" class="btn btn-link"><img src="/weather-icon.png" width="30" height="30"></button></a>
-        <a href="#"><button type="button" class="btn btn-link"><img src="/youtube-icon.png" width="30" height="30"></button></a>
-        <a href="#"><button type="button" class="btn btn-link"><img src="/reddit-icon.png" width="30" height="30"></button></a>
-        <a href="#"><button type="button" class="btn btn-link"><img src="/steam-icon.png" width="30" height="30"></button></a>
-    </div>
+        <a href="/newWeather"><button type="button" class="btn btn-link"><img src="/weather-icon.png" width="30" height="30"></button></a>
+        <a href="/newYoutubeSub"><button type="button" class="btn btn-link"><img src="/youtube-icon.png" width="30" height="30"> Subscribers</button></a>
+        <a href="/newYoutubeLast"><button type="button" class="btn btn-link"><img src="/youtube-icon.png" width="30" height="30"> Last comments</button></a>
+        <a href="/newYoutubeViews"><button type="button" class="btn btn-link"><img src="/youtube-icon.png" width="30" height="30"> Number of views</button></a>
+        <a href="/newReddit"><button type="button" class="btn btn-link"><img src="/reddit-icon.png" width="30" height="30"></button></a>
+        <a href="/newSteam"><button type="button" class="btn btn-link"><img src="/steam-icon.png" width="30" height="30"></button></a>
 </div>
 <hr>
 <h1 class="text-center">Settings Your Widgets:</h1>
 <div class="card-columns m-3">
-    <%- include("partials/settingWeather.ejs", {settings: widget.meteo}) %>
-    <%- include("partials/settingSteam.ejs", {settings: widget.steam}) %>
-    <%- include("partials/settingViews.ejs", {settings: widget.ytViews}) %>
-    <%- include("partials/settingSubscribers.ejs", {settings: widget.ytSub}) %>
-    <%- include("partials/settingLastComments.ejs", {settings: widget.ytLast}) %>
-    <%- include("partials/settingReddit.ejs", {settings: widget.reddit}) %>
+    <% for (let i = 0; i < widgets.meteo.length; i++) { %>
+        <%- include("partials/settingWeather.ejs", {settings: widgets.meteo[i], id: i}) %>
+    <% } %>
+    <% for (let i = 0; i < widgets.steam.length; i++) { %>
+            <%- include("partials/settingSteam.ejs", {settings: widgets.steam[i], id: i}) %>
+    <% } %>
+    <% for (let i = 0; i < widgets.ytViews.length; i++) { %>
+            <%- include("partials/settingViews.ejs", {settings: widgets.ytViews[i], id: i}) %>
+    <% } %>
+    <% for (let i = 0; i < widgets.ytSub.length; i++) { %>
+            <%- include("partials/settingSubscribers.ejs", {settings: widgets.ytSub[i], id: i}) %>
+    <% } %>
+    <% for (let i = 0; i < widgets.ytLast.length; i++) { %>
+            <%- include("partials/settingLastComments.ejs", {settings: widgets.ytLast[i], id: i}) %>
+    <% } %>
+    <% for (let i = 0; i < widgets.reddit.length; i++) { %>
+            <%- include("partials/settingReddit.ejs", {settings: widgets.reddit[i], id: i}) %>
+    <% } %>
 </div>
 </body>
 </html>
