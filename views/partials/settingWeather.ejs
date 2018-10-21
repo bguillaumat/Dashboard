@@ -1,0 +1,29 @@
+<div class="card-columns m-3">
+    <div class="card shadow rounded" style="background-color: #ffffff;">
+        <form method="post" action="/updateMeteo/">
+            <div class="card-header" style="background-color: #6200ee;color: #ffffff;">
+                <img src="https://www.freeiconspng.com/uploads/weather-icon-png-16.png" width="30" height="30">
+                What is the weather like in <i class="font-weight-bold"><%= settings.data.city %></i>, today ?
+                <div class="checkbox checkbox-slider--b-flat">
+                    <label>
+                        <input style="-webkit-appearance: none" type="checkbox" name="mState" id="mState" <%= settings.state ? 'checked' : '' %>><span></span>
+                    </label>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="form-group">
+                    <label for="location">Change Location:</label>
+                    <input class="form-control" type="text" name="location" id="location" autofocus/>
+                    <small id="emailHelp" class="form-text text-muted">Only provide the id of the game.</small>
+                </div>
+                <div class="form-group">
+                    <label for="id">Timer:</label>
+                    <input class="form-control" type="number" min="5" name="mTimer" id="mTimer" autofocus/>
+                    <small id="emailHelp" class="form-text text-muted">Number of seconds between each widget refresh.</small>
+                </div>
+            </div>
+            <div class="card-footer text-right">
+                <input class="btn btn-link" type="submit" value="Save"/>
+            </div>
+        </form>
+    </div>

@@ -46,11 +46,13 @@ exports.view = function(id, callback) {
                 let result = JSON.parse(body);
                 if (result.pageInfo.totalResults === 0)
                     callback(null, null);
-                let data = {
-                    name: result.items[0].snippet.title,
-                    views: result.items[0].statistics.viewCount
-                };
-                callback(null, data);
+                else {
+                    let data = {
+                        name: result.items[0].snippet.title,
+                        views: result.items[0].statistics.viewCount
+                    };
+                    callback(null, data);
+                }
             }
         }catch(e){
             callback(e);

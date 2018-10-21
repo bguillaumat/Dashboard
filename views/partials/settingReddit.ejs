@@ -1,0 +1,33 @@
+<div class="card shadow rounded" style="background-color: #ffffff;">
+    <form method="post" action="/updateReddit/">
+        <div class="card-header" style="background-color: #6200ee;color: #ffffff;">
+            <img src="https://vignette.wikia.nocookie.net/lakewood-plaza-turbo/images/e/ec/Reddit_Logo.png/revision/latest?cb=20180603190206" width="30" height="30">
+            <i class="font-weight-bold"><%= settings.data.nbr %></i> last posts for <i class="font-weight-bold"><%= settings.data.sub %></i> subreddit.
+            <div class="checkbox checkbox-slider--b-flat">
+                <label>
+                    <input style="-webkit-appearance: none" type="checkbox" id="redditState" name="redditState" <%= settings.state ? 'checked' : '' %>><span></span>
+                </label>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="form-group">
+                <label for="id">Change subreddit:</label>
+                <input class="form-control" type="text" name="redditId" id="redditId" autofocus/>
+                <small id="emailHelp" class="form-text text-muted">Only provide the name of the subreddit.</small>
+            </div>
+            <div class="form-group">
+                <label for="id">Number of last posts:</label>
+                <input class="form-control" type="number" name="redditNbr" id="redditNbr" min="1" max="20" autofocus/>
+                <small id="emailHelp" class="form-text text-muted">Number of last posts.</small>
+            </div>
+            <div class="form-group">
+                <label for="id">Timer:</label>
+                <input class="form-control" type="number" name="redditTimer" id="redditTimer" min="5" autofocus/>
+                <small id="emailHelp" class="form-text text-muted">Number of seconds between each widget refresh.</small>
+            </div>
+        </div>
+        <div class="card-footer text-right">
+            <input class="btn btn-link" type="submit" value="Save"/>
+        </div>
+    </form>
+</div>
