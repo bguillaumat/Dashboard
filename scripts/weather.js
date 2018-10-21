@@ -5,16 +5,18 @@ exports.openweathermeteo = function(city, callback){
 
     request(url, function(err, response, body){
         try{
-            let result = JSON.parse(body);
-            if (result.cod === "404")
-                callback(null, null);
-            else {
-                let previsions = {
-                    temperature: result.main.temp,
-                    icon: result.weather[0].icon,
-                    state: result.weather[0].main
-                };
-                callback(null, previsions);
+            if (body) {
+                let result = JSON.parse(body);
+                if (result.cod === "404")
+                    callback(null, null);
+                else {
+                    let previsions = {
+                        temperature: result.main.temp,
+                        icon: result.weather[0].icon,
+                        state: result.weather[0].main
+                    };
+                    callback(null, previsions);
+                }
             }
         }catch(e){
             callback(e);
