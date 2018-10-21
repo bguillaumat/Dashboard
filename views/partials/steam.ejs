@@ -1,0 +1,10 @@
+<div class="card shadow rounded" style="background-color: #ffffff;">
+    <div class="card-header" style="background-color: #6200ee;color: #ffffff;">
+        <img src="https://png.icons8.com/metro/1600/steam.png" width="30" height="30">
+        How many players are playing <i class="font-weight-bold"><%= steam.data.name %></i> ?
+    </div>
+    <img class="card-img-bottom" src="<%= 'https://steamcdn-a.akamaihd.net/steam/apps/' + steam.data.id +'/header.jpg' %>">
+    <div class="card-body text-center">
+        <i class="font-weight-bold"><%= steam.data.players.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ")%></i> players are currently playing in <i class="font-weight-bold"><%= steam.data.name %></i>
+    </div>
+</div>

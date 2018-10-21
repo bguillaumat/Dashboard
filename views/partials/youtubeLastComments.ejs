@@ -1,0 +1,14 @@
+<div class="card shadow rounded">
+    <div class="card-header" style="background-color: #6200ee;color: #ffffff;">
+        <img src="https://www.freeiconspng.com/uploads/youtube-logo-icon-symbol-18.png" width="30" height="30">
+        <i class="font-weight-bold"><%= lastComments.data.nbr %></i> last comment for <i class="font-weight-bold"><%= lastComments.data.name %></i>
+    </div>
+    <div class="card-body">
+        <iframe style="width: 100%" src="<%= 'https://www.youtube.com/embed/' + lastComments.data.id %>" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+    </div>
+    <div class="card-footer">
+        <% for (let i = 0; i < widget.ytLast.data.nbr; i++) { %>
+            <div><%= lastComments.data.comments[i] %></div><br>
+        <% } %>
+    </div>
+</div>

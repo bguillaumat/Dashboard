@@ -1,0 +1,14 @@
+<div class="card shadow rounded" style="background-color: #ffffff;">
+    <div class="card-header" style="background-color: #6200ee;color: #ffffff;">
+        <img src="https://www.freeiconspng.com/uploads/weather-icon-png-16.png" width="30" height="30">
+        What is the weather like in <i class="font-weight-bold"><%= weather.data.city %></i>, today ?
+    </div>
+    <div class="card-body">
+        <%= 'At ' + weather.data.city + ',' %>
+        <%= 'It\'s ' + weather.data.temp + '°C.'%>
+        <div>
+            <%= weather.data.state %>
+            <img style="width: 50px;height: 50px;" src="<%= 'http://openweathermap.org/img/w/' + weather.data.icon + '.png' %>">
+        </div>
+    </div>
+</div>

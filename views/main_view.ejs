@@ -22,90 +22,22 @@
         </nav>
         <div class="card-columns m-3">
             <%if (widget.meteo.state == true && widget.meteo.data.temp != null) { %>
-                <div class="card shadow rounded" style="background-color: #ffffff;">
-                    <div class="card-header" style="background-color: #6200ee;color: #ffffff;">
-                        <img src="https://www.freeiconspng.com/uploads/weather-icon-png-16.png" width="30" height="30">
-                        What is the weather like in <i class="font-weight-bold"><%= widget.meteo.data.city %></i>, today ?
-                    </div>
-                    <div class="card-body">
-                        <%= 'At ' + widget.meteo.data.city + ',' %>
-                        <%= 'It\'s ' + widget.meteo.data.temp + '°C.'%>
-                        <div>
-                            <%= widget.meteo.data.state %>
-                            <img style="width: 50px;height: 50px;" src="<%= 'http://openweathermap.org/img/w/' + widget.meteo.data.icon + '.png' %>">
-                        </div>
-                    </div>
-                </div>
+                <%- include("partials/weather", {weather: widget.meteo}) %>
             <% } %>
             <%if (widget.steam.state == true && widget.steam.data.players != null) { %>
-                <div class="card shadow rounded" style="background-color: #ffffff;">
-                    <div class="card-header" style="background-color: #6200ee;color: #ffffff;">
-                        <img src="https://png.icons8.com/metro/1600/steam.png" width="30" height="30">
-                        How many players are playing <i class="font-weight-bold"><%= widget.steam.data.name %></i> ?
-                    </div>
-                    <img class="card-img-bottom" src="<%= 'https://steamcdn-a.akamaihd.net/steam/apps/' + widget.steam.data.id +'/header.jpg' %>">
-                    <div class="card-body text-center">
-                        <i class="font-weight-bold"><%= widget.steam.data.players.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ")%></i> players are currently playing in <i class="font-weight-bold"><%= widget.steam.data.name %></i>
-                    </div>
-                </div>
+                <%- include("partials/steam", {steam: widget.steam}) %>
             <% } %>
-            <% if (widget.ytLast.state || widget.ytSub.state || widget.ytViews.state) { %>
-                <% if (widget.ytViews.state) { %>
-                    <div class="card shadow rounded">
-                        <div class="card-header" style="background-color: #6200ee;color: #ffffff;">
-                            <img src="https://www.freeiconspng.com/uploads/youtube-logo-icon-symbol-18.png" width="30" height="30">
-                            Number of views for <i class="font-weight-bold"><%= widget.ytViews.data.name %></i>
-                        </div>
-                        <div class="card-body">
-                            <iframe style="width: 100%" src="<%= 'https://www.youtube.com/embed/' + widget.ytViews.data.id %>" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-                        </div>
-                        <div class="card-footer text-center">
-                            <i class="font-weight-bold"><%= widget.ytViews.data.name %></i> has been viewed <i class="font-weight-bold"><%= widget.ytViews.data.views %></i> times.
-                        </div>
-                    </div>
-                <% } %>
-                <% if (widget.ytSub.state) { %>
-                    <div class="card shadow rounded">
-                        <div class="card-header" style="background-color: #6200ee;color: #ffffff;">
-                            <img src="https://www.freeiconspng.com/uploads/youtube-logo-icon-symbol-18.png" width="30" height="30">
-                            Number of subscribers for <i class="font-weight-bold"><%= widget.ytSub.data.name %></i>
-                        </div>
-                        <div class="card-body text-center">
-                            Channel <i class="font-weight-bold"><%= widget.ytSub.data.name %></i> has <i class="font-weight-bold"><%= widget.ytSub.data.subs %></i> subscribers.
-                        </div>
-                    </div>
-                <% } %>
-                <% if (widget.ytLast.state) { %>
-                    <div class="card shadow rounded">
-                        <div class="card-header" style="background-color: #6200ee;color: #ffffff;">
-                            <img src="https://www.freeiconspng.com/uploads/youtube-logo-icon-symbol-18.png" width="30" height="30">
-                            <i class="font-weight-bold"><%= widget.ytLast.data.nbr %></i> last comment for <i class="font-weight-bold"><%= widget.ytLast.data.name %></i>
-                        </div>
-                        <div class="card-body">
-                            <iframe style="width: 100%" src="<%= 'https://www.youtube.com/embed/' + widget.ytLast.data.id %>" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-                        </div>
-                        <div class="card-footer">
-                            <% for (let i = 0; i < widget.ytLast.data.nbr; i++) { %>
-                                <div><%= widget.ytLast.data.comments[i] %></div><br>
-                            <% } %>
-                        </div>
-                    </div>
-                <% } %>
+            <% if (widget.ytViews.state) { %>
+                <%- include("partials/youtubeViews", {views: widget.ytViews}) %>
+            <% } %>
+            <% if (widget.ytSub.state) { %>
+                <%- include("partials/youtubeSubscribers", {subscribers: widget.ytSub}) %>
+            <% } %>
+            <% if (widget.ytLast.state) { %>
+                <%- include("partials/youtubeLastComments", {lastComments: widget.ytLast}) %>
             <% } %>
             <% if (widget.reddit.state) { %>
-
-                    <div class="card shadow rounded">
-                        <div class="card-header" style="background-color: #6200ee;color: #ffffff;">
-                            <img src="https://vignette.wikia.nocookie.net/lakewood-plaza-turbo/images/e/ec/Reddit_Logo.png/revision/latest?cb=20180603190206" width="30" height="30">
-                            <i class="font-weight-bold"><%= widget.reddit.data.nbr %></i> last posts for <i class="font-weight-bold"><%= widget.reddit.data.sub %></i> subreddit.
-                        </div>
-                        <div class="card-body">
-                            <% for (let i = 0; i < widget.reddit.data.posts.length; i++) { %>
-                                <a href="<%= widget.reddit.data.posts[i].link %>">#<%= i + 1 %> - <%= widget.reddit.data.posts[i].title %> by <%= widget.reddit.data.posts[i].author %></a><br>
-                            <% } %>
-                        </div>
-                    </div>
-
+                <%- include("partials/reddit", {reddit: widget.reddit}) %>
             <% } %>
         </div>
     </body>
