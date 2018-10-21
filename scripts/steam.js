@@ -5,11 +5,15 @@ exports.steamName = function(id, callback) {
 
     request(url, function(err, response, body){
         try{
-            let result = JSON.parse(body);
-            if (result == null)
+            if (body.startsWith("<HTML>"))
                 callback(null, null);
-            else
-                callback(null, Object.values(result)[0].data.name);
+            if (body) {
+                let result = JSON.parse(body);
+                if (result == null)
+                    callback(null, null);
+                else
+                    callback(null, Object.values(result)[0].data.name);
+            }
         }catch(e){
             callback("This: ", e);
         }

@@ -1,3 +1,4 @@
+const requestIp = require('request-ip');
 let express = require('express');
 let app = express();
 let session = require('cookie-session');
@@ -22,7 +23,9 @@ let widget = {meteo: {state: false, data: {city: '', temp: '', state: '', icon: 
     steam: {state: false, data: {players: '', id: '', name: ''}, timer: 6},
     ytSub: {state: false, data: {id: '', name: '', subs: ''}, timer: 6},
     ytViews: {state: false, data: {id: '', name: '', views: ''}, timer: 6},
-    ytLast: {state: false, data: {id: '', nbr: 5, name: '', comments: []}, timer: 6}};
+    ytLast: {state: false, data: {id: '', nbr: 5, name: '', comments: []}, timer: 6},
+    reddit: {state: false, data: {sub: '', nbr: 5, posts: []}, timer: 6}
+};
 
 function wichWidget() {
     return new Promise(async resolve => {
@@ -30,31 +33,37 @@ function wichWidget() {
             await widgets.meteo(widget);
             setInterval(async function () {
                 await widgets.meteo(widget);
-            }, widget.meteo.timer * 1000);
+            }, widget.meteo.timer * 1000 * 60);
         }
         if (widget.steam.state && widget.steam.data.id !== '') {
             await widgets.steam(widget);
             setInterval(async function () {
                 await widgets.steam(widget);
-            }, widget.steam.timer * 1000);
+            }, widget.steam.timer * 1000 * 60);
         }
         if (widget.ytSub && widget.ytSub.data.id !== '') {
             await widgets.ytSubs(widget);
             setInterval(async function () {
                 await widgets.ytSubs(widget);
-            }, widget.ytSub.timer * 1000);
+            }, widget.ytSub.timer * 1000 * 60);
         }
         if (widget.ytViews && widget.ytViews.data.id !== '') {
             await widgets.ytViews(widget);
             setInterval(async function () {
                 await widgets.ytViews(widget);
-            }, widget.ytViews.timer * 1000);
+            }, widget.ytViews.timer * 1000 * 60);
         }
         if (widget.ytLast && widget.ytLast.data.id !== '') {
             await widgets.ytLast(widget);
             setInterval(async function () {
                 await widgets.ytLast(widget);
-            }, widget.ytLast.timer * 1000);
+            }, widget.ytLast.timer * 1000 * 60);
+        }
+        if (widget.reddit && widget.reddit.data.sub !== '') {
+            await widgets.reddit(widget);
+            setInterval(async function () {
+                await widgets.reddit(widget);
+            }, widget.reddit.timer * 1000 * 60);
         }
         resolve(true);
     });
@@ -79,10 +88,9 @@ app.use(session({secret: 'dashboard'}))
     })
 
     .get('/about.json', function (req, res) {
-        if (store.get('user') != null)
-            res.render('json.ejs');
-        else
-            res.render('log.ejs', {err});
+        let clientIp = requestIp.getClientIp(req);
+        let epochTime = (new Date).getTime();
+        res.render('json.ejs', {clientIp: clientIp, epochTime: epochTime});
     })
 
     .get('/permissions', function (req, res) {
@@ -109,6 +117,10 @@ app.use(session({secret: 'dashboard'}))
                         widget.ytLast.data.id = doc.data().ytLast.id;
                         widget.ytLast.data.nbr = doc.data().ytLast.nbr;
                         widget.ytLast.timer = doc.data().ytLast.timer;
+                        widget.reddit.timer = doc.data().reddit.timer;
+                        widget.reddit.state = doc.data().reddit.state;
+                        widget.reddit.data.sub = doc.data().reddit.sub;
+                        widget.reddit.data.nbr = doc.data().reddit.nbr;
                         res.redirect('/main');
                     }
                 })
@@ -134,6 +146,7 @@ app.use(session({secret: 'dashboard'}))
                 ytSub: {state: false, id: '', timer: 6},
                 ytViews: {state: false, id: '', timer: 6},
                 ytLast: {state: false, id: '', nbr: 5, timer: 6},
+                reddit: {state: false, sub: '', nbr: 5, timer: 6},
             })
                 .then(function() {
                     res.redirect('/permissions');
@@ -200,7 +213,7 @@ app.use(session({secret: 'dashboard'}))
     
     .post('/updateMeteo/', urlencodedParser, function (req, res) {
         widget.meteo.state = req.body.mState === "on";
-        if (req.body.mTimer >= 5)
+        if (req.body.mTimer >= 1)
             widget.meteo.timer = req.body.mTimer;
         if (req.body.location !== '') {
             widget.meteo.data.city = req.body.location;
@@ -218,7 +231,7 @@ app.use(session({secret: 'dashboard'}))
 
     .post('/updateSteam/', urlencodedParser, async function (req, res) {
         widget.steam.state = req.body.sState === "on";
-        if (req.body.sTimer >= 5)
+        if (req.body.sTimer >= 1)
             widget.steam.timer = req.body.sTimer;
         if (req.body.id !== '') {
             widget.steam.data.id = req.body.id;
@@ -237,7 +250,7 @@ app.use(session({secret: 'dashboard'}))
 
     .post('/updateSub/', urlencodedParser, async function (req, res) {
         widget.ytSub.state = req.body.subState === "on";
-        if (req.body.subTimer >= 5)
+        if (req.body.subTimer >= 1)
             widget.ytSub.timer = req.body.subTimer;
         if (req.body.subid !== '') {
             widget.ytSub.data.id = req.body.subid;
@@ -256,7 +269,7 @@ app.use(session({secret: 'dashboard'}))
 
     .post('/updateViews/', urlencodedParser, async function (req, res) {
         widget.ytViews.state = req.body.vState === "on";
-        if (req.body.vTimer >= 5)
+        if (req.body.vTimer >= 1)
             widget.ytViews.timer = req.body.vTimer;
         if (req.body.vid !== '') {
             widget.ytViews.data.id = req.body.vid;
@@ -275,7 +288,7 @@ app.use(session({secret: 'dashboard'}))
 
     .post('/updateLast/', urlencodedParser, async function (req, res) {
         widget.ytLast.state = req.body.lState === "on";
-        if (req.body.lTimer >= 5)
+        if (req.body.lTimer >= 1)
             widget.ytLast.timer = req.body.lTimer;
         if (req.body.nbr > 0)
             widget.ytLast.data.nbr = req.body.nbr;
@@ -293,7 +306,27 @@ app.use(session({secret: 'dashboard'}))
             widget.ytLast.data.name = '';
         res.redirect('/settings');
     })
-    
+
+    .post('/updateReddit/', urlencodedParser, async function (req, res) {
+        widget.reddit.state = req.body.redditState === "on";
+        if (req.body.redditTimer >= 1)
+            widget.reddit.timer = req.body.redditTimer;
+        if (req.body.redditNbr > 0)
+            widget.reddit.data.nbr = req.body.redditNbr;
+        if (req.body.redditId !== '') {
+            widget.reddit.data.sub = req.body.redditId;
+        }
+        db.collection("Users").doc(store.get('user').data.user.uid).update({
+            reddit: {state: widget.reddit.state, nbr: widget.reddit.data.nbr, sub: widget.reddit.data.sub, timer: widget.reddit.timer}
+        }).then(function() {
+            res.redirect('/settings');
+        }).catch(function(error) {
+        });
+        if (widget.reddit.data.sub == null)
+            widget.reddit.data.sub = '';
+        res.redirect('/settings');
+    })
+
     .use(function(req, res, next){
         res.redirect('/login');
     });
