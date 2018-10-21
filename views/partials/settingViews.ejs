@@ -18,11 +18,11 @@
             <div class="form-group">
                 <label for="id">Timer:</label>
                 <input class="form-control" type="number" name="vTimer" id="vTimer" min="5" value="<%= settings.timer %>" autofocus/>
-                <small id="emailHelp" class="form-text text-muted">Number of seconds between each widget refresh.</small>
+                <small id="emailHelp" class="form-text text-muted">Number of minutes between each widget refresh.</small>
             </div>
         </div>
         <div class="card-footer text-right">
-            <a href="/deleteViews/<%= id %>" class="btn btn-danger">Delete</a>
+            <a href="/deleteViews/<%= id %>" class="btn btn-danger"><i class="fa fa-trash-alt"></i></a>
             <input class="btn btn-link" type="submit" value="Save"/>
         </div>
     </form>

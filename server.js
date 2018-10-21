@@ -271,7 +271,7 @@ app.use(session({secret: 'dashboard'}))
     .post('/main/', urlencodedParser, function (req, res) {
         res.redirect('/main');
     })
-    
+
     .post('/updateMeteo/:id', urlencodedParser, function (req, res) {
         let index = req.params.id;
         db.collection("Users").doc(store.get('user').data.user.uid).update({
