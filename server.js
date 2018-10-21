@@ -151,7 +151,6 @@ app.use(session({secret: 'dashboard'}))
                         {
                             allWidgets.reddit.push({state: data.state, data: {sub: data.sub, nbr: data.nbr, posts: []}, timer: data.timer});
                         }
-                        console.log(allWidgets);
                         /*allWidgets.meteo.state = doc.data().meteo.state;
                         allWidgets.meteo.data.city = doc.data().meteo.city;
                         allWidgets.meteo.timer = doc.data().meteo.timer;
