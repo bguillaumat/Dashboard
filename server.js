@@ -21,7 +21,8 @@ let widget = {meteo: {state: false, data: {city: 'Paris', temp: '', state: '', i
     steam: {state: false, data: {players: '', id: '578080', name: ''}, timer: 6},
     ytSub: {state: false, data: {id: 'UCUaHJ0fTA-1theR8A8Polmw', name: '', subs: ''}, timer: 6},
     ytViews: {state: false, data: {id: 'KcgGS3EvKYA', name: '', views: ''}, timer: 6},
-    ytLast: {state: false, data: {id: 'KcgGS3EvKYA', nbr: 5, name: '', comments: []}, timer: 6}};
+    ytLast: {state: false, data: {id: 'KcgGS3EvKYA', nbr: 5, name: '', comments: []}, timer: 6},
+    reddit: {state: true, data: {sub: 'funny', nbr: 5, posts: []}, timer: 6}};
 
 function wichWidget() {
     return new Promise(async resolve => {
@@ -41,19 +42,25 @@ function wichWidget() {
             await widgets.ytSubs(widget);
             setInterval(async function () {
                 await widgets.ytSubs(widget);
-            }, widget.ytSub.timer * 1000);
+            }, widget.ytSub.timer * 1000 * 60);
         }
         if (widget.ytViews) {
             await widgets.ytViews(widget);
             setInterval(async function () {
                 await widgets.ytViews(widget);
-            }, widget.ytViews.timer * 1000);
+            }, widget.ytViews.timer * 1000 * 60);
         }
         if (widget.ytLast) {
             await widgets.ytLast(widget);
             setInterval(async function () {
                 await widgets.ytLast(widget);
-            }, widget.ytLast.timer * 1000);
+            }, widget.ytLast.timer * 1000 * 60);
+        }
+        if (widget.reddit) {
+            await widgets.reddit(widget);
+            setInterval(async function () {
+                await widgets.reddit(widget);
+            }, widget.reddit.timer * 1000 * 60);
         }
         resolve(true);
     });
@@ -121,7 +128,8 @@ app.use(session({secret: 'dashboard'}))
                 steam: false,
                 ytSub: false,
                 ytLast: false,
-                ytViews: false
+                ytViews: false,
+                reddit: false
             })
                 .then(function() {
                     res.redirect('/permissions');

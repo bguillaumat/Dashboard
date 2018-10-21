@@ -1,6 +1,7 @@
 let weather = require('./weather');
 let steam = require('./steam');
 let yt = require('./youtube');
+let reddit = require('./reddit');
 
 exports.meteo = async function (widget) {
     let prevision = await weather.askMeteo(widget.meteo.data.city);
@@ -42,4 +43,9 @@ exports.ytLast = async function (widget) {
     let data = await yt.askViews(widget.ytLast.data.id);
     widget.ytLast.data.comments = await yt.askComments(widget.ytLast.data.id, widget.ytLast.data.nbr);
     widget.ytLast.data.name = data.name;
+};
+
+exports.reddit = async function (widget) {
+    let posts = await reddit.askReddit(widget.reddit.data.sub, widget.reddit.data.nbr);
+    widget.reddit.data.posts = posts;
 };
