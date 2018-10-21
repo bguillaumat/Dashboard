@@ -77,7 +77,6 @@ exports.channel = function(id, callback){
         try{
             if (body) {
                 let result = JSON.parse(body);
-                console.log(result);
                 if (id === '' || result.hasOwnProperty('error'))
                     callback(null, null);
                 if (result.pageInfo.totalResults === 0)

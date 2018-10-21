@@ -6,7 +6,6 @@ exports.getLastSub = function(sub, nbr, callback){
     request(url, function(err, response, body){
         try{
             let result = JSON.parse(body);
-            console.log(result.data.children);
             let posts = [];
             for (let i = 0; i < nbr; ++i) {
                 if (result.data.children[i].data.title != null) {
