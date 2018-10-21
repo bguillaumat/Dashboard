@@ -44,6 +44,8 @@ exports.ytLast = async function (widget) {
     widget.data.comments = await yt.askComments(widget.data.id, widget.data.nbr);
     if (data)
         widget.data.name = data.name;
+    else
+        widget.data.name = '';
 };
 
 exports.reddit = async function (widget) {

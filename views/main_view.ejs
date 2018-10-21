@@ -21,7 +21,7 @@
         <div class="card-columns m-3">
             <% for (let i = 0; i < widgets.meteo.length; i++) { %>
                 <%if (widgets.meteo[i].state == true && widgets.meteo[i].data.temp != null) { %>
-                    <%- include("partials/weather", {weather: widgets.meteo[i]}) %>
+                <%- include("partials/weather", {weather: widgets.meteo[i]}) %>
                 <% } %>
             <% } %>
             <% for (let i = 0; i < widgets.steam.length; i++) { %>
