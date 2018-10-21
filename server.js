@@ -19,13 +19,7 @@ const config = {
 firebase.initializeApp(config);
 let db = firebase.firestore();
 let err = {code: false, msg: ""};
-let widget = {meteo: {state: false, data: {city: '', temp: '', state: '', icon: ''}, timer: 5},
-    steam: {state: false, data: {players: '', id: '', name: ''}, timer: 5},
-    ytSub: {state: false, data: {id: '', name: '', subs: ''}, timer: 5},
-    ytViews: {state: false, data: {id: '', name: '', views: ''}, timer: 5},
-    ytLast: {state: false, data: {id: '', nbr: 5, name: '', comments: []}, timer: 5},
-    reddit: {state: false, data: {sub: '', nbr: 5, posts: []}, timer: 5}
-};
+
 let allWidgets = {
     meteo: [],
     steam: [],
@@ -208,12 +202,10 @@ app.use(session({secret: 'dashboard'}))
                 ytViews: [],
                 ytLast: [],
                 reddit: [],
-            })
-                .then(function() {
-                    res.redirect('/permissions');
-                })
-                .catch(function(error) {
-                });
+            }).then(function() {
+                res.redirect('/permissions');
+            }).catch(function(error) {
+            });
         else
             res.redirect('/login');
     })
@@ -277,11 +269,8 @@ app.use(session({secret: 'dashboard'}))
         db.collection("Users").doc(store.get('user').data.user.uid).update({
             meteo: firebase.firestore.FieldValue.arrayRemove({state: allWidgets.meteo[index].state, city: allWidgets.meteo[index].data.city, timer: allWidgets.meteo[index].timer})
         }).then(function () {
-            res.redirect('/settings');
-        })
-            .catch(function (error) {
-
-            });
+        }).catch(function (error) {
+        });
         allWidgets.meteo[index].state = req.body.mState === "on";
         if (req.body.mTimer >= 1)
             allWidgets.meteo[index].timer = req.body.mTimer;
@@ -292,10 +281,8 @@ app.use(session({secret: 'dashboard'}))
             meteo: firebase.firestore.FieldValue.arrayUnion({state: allWidgets.meteo[index].state, city: allWidgets.meteo[index].data.city, timer: allWidgets.meteo[index].timer})
         }).then(function () {
             res.redirect('/settings');
-        })
-            .catch(function (error) {
-
-            });
+        }).catch(function (error) {
+        });
         res.redirect('/settings');
     })
 
@@ -304,7 +291,6 @@ app.use(session({secret: 'dashboard'}))
         db.collection("Users").doc(store.get('user').data.user.uid).update({
             steam: firebase.firestore.FieldValue.arrayRemove({id: allWidgets.steam[index].data.id, state: allWidgets.steam[index].state, timer: allWidgets.steam[index].timer})
         }).then(function() {
-            res.redirect('/settings');
         }).catch(function(error) {
         });
         allWidgets.steam[index].state = req.body.sState === "on";
@@ -330,7 +316,6 @@ app.use(session({secret: 'dashboard'}))
         db.collection("Users").doc(store.get('user').data.user.uid).update({
             ytSub: firebase.firestore.FieldValue.arrayRemove({id: allWidgets.ytSub[index].data.id, state: allWidgets.ytSub[index].state, timer: allWidgets.ytSub[index].timer})
         }).then(function() {
-            res.redirect('/settings');
         }).catch(function(error) {
         });
         allWidgets.ytSub[index].state = req.body.subState === "on";
@@ -356,7 +341,6 @@ app.use(session({secret: 'dashboard'}))
         db.collection("Users").doc(store.get('user').data.user.uid).update({
             ytViews: firebase.firestore.FieldValue.arrayRemove({id: allWidgets.ytViews[index].data.id, state: allWidgets.ytViews[index].state, timer: allWidgets.ytViews[index].timer})
         }).then(function() {
-            res.redirect('/settings');
         }).catch(function(error) {
         });
         allWidgets.ytViews[index].state = req.body.vState === "on";
@@ -382,7 +366,6 @@ app.use(session({secret: 'dashboard'}))
         db.collection("Users").doc(store.get('user').data.user.uid).update({
             ytLast: firebase.firestore.FieldValue.arrayRemove({id: allWidgets.ytLast[index].data.id, state: allWidgets.ytLast[index].state, nbr: allWidgets.ytLast[index].data.nbr, timer: allWidgets.ytLast[index].timer})
         }).then(function() {
-            res.redirect('/settings');
         }).catch(function(error) {
         });
         allWidgets.ytLast[index].state = req.body.lState === "on";
@@ -397,7 +380,6 @@ app.use(session({secret: 'dashboard'}))
         db.collection("Users").doc(store.get('user').data.user.uid).update({
             ytLast: firebase.firestore.FieldValue.arrayUnion({id: allWidgets.ytLast[index].data.id, state: allWidgets.ytLast[index].state, nbr: allWidgets.ytLast[index].data.nbr, timer: allWidgets.ytLast[index].timer})
         }).then(function() {
-            res.redirect('/settings');
         }).catch(function(error) {
         });
         if (allWidgets.ytLast[index].data.name == null)
@@ -410,7 +392,6 @@ app.use(session({secret: 'dashboard'}))
         db.collection("Users").doc(store.get('user').data.user.uid).update({
             reddit: firebase.firestore.FieldValue.arrayRemove({state: allWidgets.reddit[index].state, nbr: allWidgets.reddit[index].data.nbr, sub: allWidgets.reddit[index].data.sub, timer: allWidgets.reddit[index].timer})
         }).then(function() {
-            res.redirect('/settings');
         }).catch(function(error) {
         });
         allWidgets.reddit[index].state = req.body.redditState === "on";
