@@ -1,13 +1,13 @@
 let request = require('request');
 
 exports.openweathermeteo = function(city, callback){
-    let  url = 'http://api.openweathermap.org/data/2.5/weather?q='+city+'&units=metric&appid=521c8f8246c012c8421856de66e06c2a';
+    let  url = 'http://api.openweathermap.org/data/2.5/weather?q='+city+'&units=metric&appid=ecacbaa661cb5c871a7ea2022272dc5b';
 
     request(url, function(err, response, body){
         try{
             if (body) {
                 let result = JSON.parse(body);
-                if (result.cod === "404")
+                if (result.cod == "404" || result.cod == "401")
                     callback(null, null);
                 else {
                     let previsions = {

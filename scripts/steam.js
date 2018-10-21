@@ -15,7 +15,7 @@ exports.steamName = function(id, callback) {
                     callback(null, Object.values(result)[0].data.name);
             }
         }catch(e){
-            callback(e);
+            callback("This: ", e);
         }
     });
 };

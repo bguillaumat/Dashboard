@@ -213,7 +213,7 @@ app.use(session({secret: 'dashboard'}))
     
     .post('/updateMeteo/', urlencodedParser, function (req, res) {
         widget.meteo.state = req.body.mState === "on";
-        if (req.body.mTimer > 5)
+        if (req.body.mTimer >= 1)
             widget.meteo.timer = req.body.mTimer;
         if (req.body.location !== '') {
             widget.meteo.data.city = req.body.location;
@@ -231,7 +231,7 @@ app.use(session({secret: 'dashboard'}))
 
     .post('/updateSteam/', urlencodedParser, async function (req, res) {
         widget.steam.state = req.body.sState === "on";
-        if (req.body.sTimer > 5)
+        if (req.body.sTimer >= 1)
             widget.steam.timer = req.body.sTimer;
         if (req.body.id !== '') {
             widget.steam.data.id = req.body.id;
@@ -250,7 +250,8 @@ app.use(session({secret: 'dashboard'}))
 
     .post('/updateSub/', urlencodedParser, async function (req, res) {
         widget.ytSub.state = req.body.subState === "on";
-        widget.ytSub.timer = req.body.subTimer;
+        if (req.body.subTimer >= 1)
+            widget.ytSub.timer = req.body.subTimer;
         if (req.body.subid !== '') {
             widget.ytSub.data.id = req.body.subid;
             widget.ytSub.data.name = '';
@@ -268,7 +269,7 @@ app.use(session({secret: 'dashboard'}))
 
     .post('/updateViews/', urlencodedParser, async function (req, res) {
         widget.ytViews.state = req.body.vState === "on";
-        if (req.body.vTimer > 5)
+        if (req.body.vTimer >= 1)
             widget.ytViews.timer = req.body.vTimer;
         if (req.body.vid !== '') {
             widget.ytViews.data.id = req.body.vid;
@@ -287,7 +288,7 @@ app.use(session({secret: 'dashboard'}))
 
     .post('/updateLast/', urlencodedParser, async function (req, res) {
         widget.ytLast.state = req.body.lState === "on";
-        if (req.body.lTimer > 5)
+        if (req.body.lTimer >= 1)
             widget.ytLast.timer = req.body.lTimer;
         if (req.body.nbr > 0)
             widget.ytLast.data.nbr = req.body.nbr;
@@ -308,7 +309,7 @@ app.use(session({secret: 'dashboard'}))
 
     .post('/updateReddit/', urlencodedParser, async function (req, res) {
         widget.reddit.state = req.body.redditState === "on";
-        if (req.body.redditTimer > 5)
+        if (req.body.redditTimer >= 1)
             widget.reddit.timer = req.body.redditTimer;
         if (req.body.redditNbr > 0)
             widget.reddit.data.nbr = req.body.redditNbr;
