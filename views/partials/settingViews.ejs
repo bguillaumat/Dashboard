@@ -1,0 +1,28 @@
+<div class="card shadow rounded" style="background-color: #ffffff;">
+    <form method="post" action="/updateViews/">
+        <div class="card-header" style="background-color: #6200ee;color: #ffffff;">
+            <img src="https://www.freeiconspng.com/uploads/youtube-logo-icon-symbol-18.png" width="30" height="30">
+            Number of views for <%= settings.data.name %>
+            <div class="checkbox checkbox-slider--b-flat">
+                <label>
+                    <input style="-webkit-appearance: none" type="checkbox" id="vState" name="vState" <%= settings.state ? 'checked' : '' %>><span></span>
+                </label>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="form-group">
+                <label for="id">Change Video:</label>
+                <input class="form-control" type="text" name="vid" id="vid" autofocus/>
+                <small id="emailHelp" class="form-text text-muted">Only provide the id of the video.</small>
+            </div>
+            <div class="form-group">
+                <label for="id">Timer:</label>
+                <input class="form-control" type="number" name="vTimer" id="vTimer" min="5" autofocus/>
+                <small id="emailHelp" class="form-text text-muted">Number of seconds between each widget refresh.</small>
+            </div>
+        </div>
+        <div class="card-footer text-right">
+            <input class="btn btn-link" type="submit" value="Save"/>
+        </div>
+    </form>
+</div>
