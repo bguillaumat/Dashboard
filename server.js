@@ -19,13 +19,19 @@ let config = {
 firebase.initializeApp(config);
 let db = firebase.firestore();
 let err = {code: false, msg: ""};
-let widget = {meteo: {state: false, data: {city: '', temp: '', state: '', icon: ''}, timer: 6},
-    steam: {state: false, data: {players: '', id: '', name: ''}, timer: 6},
-    ytSub: {state: false, data: {id: '', name: '', subs: ''}, timer: 6},
-    ytViews: {state: false, data: {id: '', name: '', views: ''}, timer: 6},
-    ytLast: {state: false, data: {id: '', nbr: 5, name: '', comments: []}, timer: 6},
-    reddit: {state: false, data: {sub: '', nbr: 5, posts: []}, timer: 6}
+let widget = {meteo: {state: false, data: {city: '', temp: '', state: '', icon: ''}, timer: 5},
+    steam: {state: false, data: {players: '', id: '', name: ''}, timer: 5},
+    ytSub: {state: false, data: {id: '', name: '', subs: ''}, timer: 5},
+    ytViews: {state: false, data: {id: '', name: '', views: ''}, timer: 5},
+    ytLast: {state: false, data: {id: '', nbr: 5, name: '', comments: []}, timer: 5},
+    reddit: {state: false, data: {sub: '', nbr: 5, posts: []}, timer: 5}
 };
+let allWidgets = {meteo: [{state: false, data: {city: '', temp: '', state: '', icon: ''}, timer: 5}],
+    steam: [{state: false, data: {players: '', id: '', name: ''}, timer: 5}],
+    ytSub: [{state: false, data: {id: '', name: '', subs: ''}, timer: 5}],
+    ytViews: [{state: false, data: {id: '', name: '', views: ''}, timer: 5}],
+    ytLast: [{state: false, data: {id: '', nbr: 5, name: '', comments: []}, timer: 5}],
+    reddit: [{state: false, data: {sub: '', nbr: 5, posts: []}, timer: 5}]};
 
 function wichWidget() {
     return new Promise(async resolve => {
@@ -141,12 +147,12 @@ app.use(session({secret: 'dashboard'}))
     .get('/createuser', function (req, res) {
         if (store.get('user') != null)
             db.collection("Users").doc(store.get('user').data.user.uid).set({
-                meteo: {state: false, city: '', timer: 6},
-                steam: {state: false, id: '', timer: 6},
-                ytSub: {state: false, id: '', timer: 6},
-                ytViews: {state: false, id: '', timer: 6},
-                ytLast: {state: false, id: '', nbr: 5, timer: 6},
-                reddit: {state: false, sub: '', nbr: 5, timer: 6},
+                meteo: [{state: false, city: '', timer: 6}],
+                steam: [{state: false, id: '', timer: 6}],
+                ytSub: [{state: false, id: '', timer: 6}],
+                ytViews: [{state: false, id: '', timer: 6}],
+                ytLast: [{state: false, id: '', nbr: 5, timer: 6}],
+                reddit: [{state: false, sub: '', nbr: 5, timer: 6}],
             })
                 .then(function() {
                     res.redirect('/permissions');

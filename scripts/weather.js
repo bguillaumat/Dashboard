@@ -7,7 +7,7 @@ exports.openweathermeteo = function(city, callback){
         try{
             if (body) {
                 let result = JSON.parse(body);
-                if (result.cod == "404" || result.cod == "401")
+                if (result.cod.toString() === "404" || result.cod.toString() === "401" || result.cod.toString() === "429")
                     callback(null, null);
                 else {
                     let previsions = {

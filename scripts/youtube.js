@@ -81,7 +81,7 @@ exports.channel = function(id, callback){
                     callback(null, null);
                 if (result.pageInfo.totalResults === 0)
                     callback(null, null);
-                if (typeof result.items !== "undefined" && result.items != null && result.items.length != null && result.items > 0) {
+                if (typeof result.items !== "undefined" && result.items != null) {
                     let data = {
                         name: result.items[0].snippet.title,
                         subs: result.items[0].statistics.subscriberCount

@@ -23,7 +23,7 @@ exports.steamName = function(id, callback) {
 exports.askSteamName = function(id) {
     return new Promise(resolve =>
         this.steamName(id, function(err, gameName){
-            if(err) return console.log("This error: ",err);
+            if(err) resolve(null);
             if (gameName != null) {
                 resolve(gameName);
             }

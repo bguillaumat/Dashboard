@@ -46,6 +46,5 @@ exports.ytLast = async function (widget) {
 };
 
 exports.reddit = async function (widget) {
-    let posts = await reddit.askReddit(widget.reddit.data.sub, widget.reddit.data.nbr);
-    widget.reddit.data.posts = posts;
+    widget.reddit.data.posts = await reddit.askReddit(widget.reddit.data.sub, widget.reddit.data.nbr);
 };
