@@ -1,10 +1,11 @@
+sudo: required
+
 language: node_js
 node_js:
   - "10.11.0"
 
-addons:
-  ssh_known_hosts:
-  - git.epitech.eu
+services:
+  - docker
 
 cache:
   directories:
@@ -15,33 +16,17 @@ before_install:
 
 jobs:
   include:
-    - stage: unit tests
-      script: npm test
-    - stage: deploy to staging
-      script: skip
-      deploy: &heroku
-        provider: heroku
-        app: staging-dashboard-2018
-        api_key: $KEY
-        on:
-          node: "10.11.0"
-          branch: develop
-    - stage: test staging
-      script: 'curl https://staging-dashboard-2018.herokuapp.com'
+    - stage: docker test
+      script: docker-compose build
     - stage: deploy to production
       script: skip
       deploy:
-        <<: *heroku
-        app: obscure-headland-59625
+        provider: heroku
+        app: bguillaumat-dashboard
+        api_key: $KEY
         on:
+          node: "10.11.0"
           branch: master
     - stage: test production
-      script: 'curl https://obscure-headland-59625.herokuapp.com'
-
-after_success:
-  - eval "$(ssh-agent -s)"
-  - chmod 600 .travis/id_rsa
-  - ssh-add .travis/id_rsa
-  - git remote add deploy git@git.epitech.eu:brice.lang-nguyen@epitech.eu/DEV_dashboard_2018
-  - git push deploy --all
+      script: 'curl https://bguillaumat-dashboard.herokuapp.com'
 
