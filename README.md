@@ -1,26 +1,9 @@
-[![Build Status](https://travis-ci.com/AsianPw/DEV_dashboard_2018.svg?token=M3xbjJUWZq4UxPF7fE7j&branch=master)](https://travis-ci.com/AsianPw/DEV_dashboard_2018)
+[![Build Status](https://travis-ci.com/bguillaumat/Dashboard.svg?token=JnqcJzSL9ygjbcHgxfkQ&branch=master)](https://travis-ci.com/bguillaumat/Dashboard)
 
-# Deploy the app
+# Dashboard
+A web app in NodeJs displaying widgets of services
 
-## Staging platform (Test)
-
-For deploy on staging please push and commit on develop branch.
-
-The commit is test by [travis](https://travis-ci.com/AsianPw/DEV_dashboard_2018/), then travis push the commit on heroku. 
-
-The staging platform is [here](https://staging-dashboard-2018.herokuapp.com/)
-
-## Production platform
-
-**never commit directly in master branch**
-
-For deploy on production, merge develop branch in master and push. It's the only things you're allowed to do on master branch.
-
-The commit is test by [travis](https://travis-ci.com/AsianPw/DEV_dashboard_2018/), then travis push the commit on heroku. 
-
-The production platform is [here](https://obscure-headland-59625.herokuapp.com/)
-
-# SERVICE
+# SERVICES
 * Youtube
 * Steam
 * Weather
