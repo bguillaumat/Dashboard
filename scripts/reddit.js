@@ -9,12 +9,12 @@ exports.getLastSub = function(sub, nbr, callback){
                 callback(null, null);
             else {
                 let result = JSON.parse(body);
-                if (result.error.toString() === "404")
+                let posts = [];
+                if (result.error && result.error.toString() === "404")
                     callback(null, null);
                 else {
-                    let posts = [];
                     for (let i = 0; i < nbr; ++i) {
-                        if (result.data.children[i].data.title != null) {
+                        if (result.data.children[i] && result.data.children[i].data.title != null) {
                             posts.push({
                                 title: result.data.children[i].data.title,
                                 thumbnail: result.data.children[i].data.thumbnail,

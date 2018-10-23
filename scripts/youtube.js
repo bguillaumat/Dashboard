@@ -7,7 +7,7 @@ exports.comments = function(id, nbr, callback) {
         try{
             if (body) {
                 let result = JSON.parse(body);
-                if (result.error || result.code.toString() === "404")
+                if (result.error && result.code.toString() === "404")
                     callback(null, null);
                 else {
                     let comments = [];
