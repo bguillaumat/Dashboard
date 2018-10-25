@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.com/bguillaumat/Dashboard.svg?token=JnqcJzSL9ygjbcHgxfkQ&branch=master)](https://travis-ci.com/bguillaumat/Dashboard)
+[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/bguillaumat/Dashboard/master/LICENSE)
 
 # Dashboard
 A web app in NodeJs displaying widgets of services
